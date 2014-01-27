@@ -40,10 +40,12 @@ class ObMenuQt(object):
         Starts the main window
         """
         QTApp = QtGui.QApplication(sys.argv)
+        
         mainWindow = UiMainWindow()
 
         frmMenu = Ui_frmObmenu()
         frmMenu.setupUi(frmMenu)
+        frmMenu.show()
 
         mainWindow.setCentralWidget(frmMenu)
 
