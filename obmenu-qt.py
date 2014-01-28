@@ -49,7 +49,9 @@ class ObMenuQt(object):
 
         mainWindow.setCentralWidget(frmMenu)
 
+        # just for dev. (forces stays on top)
         mainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+
         mainWindow.show()
 
         sys.exit(QTApp.exec_())
