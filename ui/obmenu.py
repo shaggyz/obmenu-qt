@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'obmenu.ui'
 #
-# Created: Mon Jan 27 15:44:45 2014
+# Created: Tue Jan 28 15:01:34 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_frmObmenu(QtGui.QWidget):
+class Ui_frmObmenu(object):
     def setupUi(self, frmObmenu):
         frmObmenu.setObjectName(_fromUtf8("frmObmenu"))
         frmObmenu.resize(400, 300)
@@ -31,8 +31,9 @@ class Ui_frmObmenu(QtGui.QWidget):
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.treeMenu = QtGui.QTreeView(frmObmenu)
+        self.treeMenu = QtGui.QTreeWidget(frmObmenu)
         self.treeMenu.setObjectName(_fromUtf8("treeMenu"))
+        self.treeMenu.headerItem().setText(0, _fromUtf8("1"))
         self.verticalLayout.addWidget(self.treeMenu)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_3 = QtGui.QVBoxLayout()
