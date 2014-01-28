@@ -5,114 +5,137 @@ import os
 
 class UiMainWindow(QtGui.QMainWindow):
     
-    def __init__(self):
-		"""
-		Constructs the main window
-		"""
-		super(QtGui.QMainWindow, self).__init__()
+    def __init__(self, autoConfigure=True):
+        """
+        Constructs the main window
+        """
+        super(QtGui.QMainWindow, self).__init__()
 
-		self.setWindowTitle("Openbox menu configuration")
-		self.statusBar().showMessage("Ready")
-		self.initMenu()
+        self.setWindowTitle("Openbox menu configuration")
+        self.statusBar().showMessage("Ready")
 
+        if autoConfigure:
+            self.initActions()
+            self.initMenu()
+            self.initToolbar()
+        
 
     def initMenu(self):
         """
         Configures menu
         """	
-        iconPath = os.getcwd() + "/icons/"
         menu = self.menuBar()
 
         # --- File Menu ---
 
-        # New
-        menuActionNew = QtGui.QAction(QtGui.QIcon(iconPath + "document-new.png"), "New", self)
-        menuActionNew.setShortcut("Ctrl+N")
-        menuActionNew.setIconVisibleInMenu(True)
-        menuActionNew.setStatusTip("New menu file")
-
-        # Open
-        menuActionOpen = QtGui.QAction(QtGui.QIcon(iconPath + "document-open.png"), "Open...", self)
-        menuActionOpen.setShortcut("Ctrl+O")
-        menuActionOpen.setStatusTip("Open menu file...")
-        
-        # Save
-        menuActionSave = QtGui.QAction(QtGui.QIcon(iconPath + "document-save.png"), "Save", self)
-        menuActionSave.setShortcut("Ctrl+S")
-        menuActionSave.setStatusTip("Save current menu")
-
-        # Save As
-        menuActionSaveAs = QtGui.QAction(QtGui.QIcon(iconPath + "document-save-as.png"), "Save As...", self)
-        menuActionSaveAs.setShortcut("Ctrl+Shift+S")
-        menuActionSaveAs.setStatusTip("Save menu as...")
-        
-        # Exit
-        menuActionQuit = QtGui.QAction(QtGui.QIcon(iconPath + "system-shutdown.png"), "Quit", self)
-        menuActionQuit.setShortcut("Ctrl+Q")
-        menuActionQuit.setStatusTip("Exits menu editor")
-        
         menuFile = menu.addMenu("&File")
-        menuFile.addAction(menuActionNew)
-        menuFile.addAction(menuActionOpen)
-        menuFile.addAction(menuActionSave)
-        menuFile.addAction(menuActionSaveAs)
-        menuFile.addAction(menuActionQuit)
+        menuFile.addAction(self.menuActionNew)
+        menuFile.addAction(self.menuActionOpen)
+        menuFile.addAction(self.menuActionSave)
+        menuFile.addAction(self.menuActionSaveAs)
+        menuFile.addAction(self.menuActionQuit)
         
         # --- Edit Menu ---
 
-        # Move up
-        menuActionMoveUp = QtGui.QAction(QtGui.QIcon(iconPath + "go-up.png"), "Move up", self)
-        menuActionMoveUp.setShortcut("Ctrl+Up")
-        menuActionMoveUp.setStatusTip("Move item up")
-
-        # Move down
-        menuActionMoveDown = QtGui.QAction(QtGui.QIcon(iconPath + "go-down.png"), "Move down", self)
-        menuActionMoveDown.setShortcut("Ctrl+Down")
-        menuActionMoveDown.setStatusTip("Move item down")
-
-        # Delete
-        menuActionDelete = QtGui.QAction(QtGui.QIcon(iconPath + "edit-delete.png"), "Delete", self)
-        menuActionDelete.setStatusTip("Delete selected item")        
-        
         menuEdit = menu.addMenu("&Edit")
-        menuEdit.addAction(menuActionMoveUp)
-        menuEdit.addAction(menuActionMoveDown)
-        menuEdit.addAction(menuActionDelete)
+        menuEdit.addAction(self.menuActionMoveUp)
+        menuEdit.addAction(self.menuActionMoveDown)
+        menuEdit.addAction(self.menuActionDelete)
 
         # --- Add Menu ---
 
-        # Menu
-        menuActionMenu = QtGui.QAction("Menu", self)
-        menuActionMenu.setStatusTip("Add menu")
-        
-        # Item
-        menuActionItem = QtGui.QAction("Item", self)
-        menuActionItem.setStatusTip("Add item")
-        
-        # Separator
-        menuActionSeparator = QtGui.QAction("Separator", self)
-        menuActionSeparator.setStatusTip("Add separator")
-
-        # Link
-        menuActionLink = QtGui.QAction("Link", self)
-        menuActionLink.setStatusTip("Add link")
-
-        # Pipemenu
-        menuActionPipe = QtGui.QAction("Pipemenu", self)
-        menuActionPipe.setStatusTip("Add pipemenu")
-
         menuAdd = menu.addMenu("&Add")
-        menuAdd.addAction(menuActionMenu)
-        menuAdd.addAction(menuActionItem)
-        menuAdd.addAction(menuActionSeparator)
-        menuAdd.addAction(menuActionPipe)
-        menuAdd.addAction(menuActionLink)
+        menuAdd.addAction(self.menuActionMenu)
+        menuAdd.addAction(self.menuActionItem)
+        menuAdd.addAction(self.menuActionSeparator)
+        menuAdd.addAction(self.menuActionPipe)
+        menuAdd.addAction(self.menuActionLink)
 
         # --- Help Menu ---
 
-        # About
-        menuActionAbout = QtGui.QAction("About", self)
-        menuActionAbout.setStatusTip("About")        
-
         menuHelp = menu.addMenu("&Help")
-        menuHelp.addAction(menuActionAbout)
+        menuHelp.addAction(self.menuActionAbout)
+
+
+    def initActions(self):
+        """
+        Configures main actions
+        """
+        iconPath = os.getcwd() + "/icons/"
+
+        # New
+        self.menuActionNew = QtGui.QAction(QtGui.QIcon(iconPath + "document-new.png"), "New", self)
+        self.menuActionNew.setShortcut("Ctrl+N")
+        self.menuActionNew.setIconVisibleInMenu(True)
+        self.menuActionNew.setStatusTip("New menu file")
+
+        # Open
+        self.menuActionOpen = QtGui.QAction(QtGui.QIcon(iconPath + "document-open.png"), "Open...", self)
+        self.menuActionOpen.setShortcut("Ctrl+O")
+        self.menuActionOpen.setStatusTip("Open menu file...")
+        
+        # Save
+        self.menuActionSave = QtGui.QAction(QtGui.QIcon(iconPath + "document-save.png"), "Save", self)
+        self.menuActionSave.setShortcut("Ctrl+S")
+        self.menuActionSave.setStatusTip("Save current menu")
+
+        # Save As
+        self.menuActionSaveAs = QtGui.QAction(QtGui.QIcon(iconPath + "document-save-as.png"), "Save As...", self)
+        self.menuActionSaveAs.setShortcut("Ctrl+Shift+S")
+        self.menuActionSaveAs.setStatusTip("Save menu as...")
+        
+        # Exit
+        self.menuActionQuit = QtGui.QAction(QtGui.QIcon(iconPath + "system-shutdown.png"), "Quit", self)
+        self.menuActionQuit.setShortcut("Ctrl+Q")
+        self.menuActionQuit.setStatusTip("Exits menu editor")
+
+        # Move up
+        self.menuActionMoveUp = QtGui.QAction(QtGui.QIcon(iconPath + "go-up.png"), "Move up", self)
+        self.menuActionMoveUp.setShortcut("Ctrl+Up")
+        self.menuActionMoveUp.setStatusTip("Move item up")
+
+        # Move down
+        self.menuActionMoveDown = QtGui.QAction(QtGui.QIcon(iconPath + "go-down.png"), "Move down", self)
+        self.menuActionMoveDown.setShortcut("Ctrl+Down")
+        self.menuActionMoveDown.setStatusTip("Move item down")
+
+        # Delete
+        self.menuActionDelete = QtGui.QAction(QtGui.QIcon(iconPath + "edit-delete.png"), "Delete", self)
+        self.menuActionDelete.setStatusTip("Delete selected item")    
+
+        # Menu
+        self.menuActionMenu = QtGui.QAction("Menu", self)
+        self.menuActionMenu.setStatusTip("Add menu")
+        
+        # Item
+        self.menuActionItem = QtGui.QAction("Item", self)
+        self.menuActionItem.setStatusTip("Add item")
+        
+        # Separator
+        self.menuActionSeparator = QtGui.QAction("Separator", self)
+        self.menuActionSeparator.setStatusTip("Add separator")
+
+        # Link
+        self.menuActionLink = QtGui.QAction("Link", self)
+        self.menuActionLink.setStatusTip("Add link")
+
+        # Pipemenu
+        self.menuActionPipe = QtGui.QAction("Pipemenu", self)
+        self.menuActionPipe.setStatusTip("Add pipemenu")
+
+        # About
+        self.menuActionAbout = QtGui.QAction("About", self)
+        self.menuActionAbout.setStatusTip("About")      
+
+    def initToolbar(self):
+        """
+        Configures main toolbar
+        """
+        toolbar = self.addToolBar('Exit')
+        toolbar.addAction(self.menuActionSave)
+        toolbar.addAction(self.menuActionMenu)
+        toolbar.addAction(self.menuActionItem)
+        toolbar.addAction(self.menuActionSeparator)
+        toolbar.addAction(self.menuActionMoveUp)
+        toolbar.addAction(self.menuActionMoveDown)
+        toolbar.addAction(self.menuActionDelete)
