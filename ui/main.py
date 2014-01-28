@@ -91,6 +91,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionQuit = QtGui.QAction(QtGui.QIcon(self.iconPath + "system-shutdown.png"), "Quit", self)
         self.menuActionQuit.setShortcut("Ctrl+Q")
         self.menuActionQuit.setStatusTip("Exits menu editor")
+        self.menuActionQuit.triggered.connect(self.close)
 
         # Move up
         self.menuActionMoveUp = QtGui.QAction(QtGui.QIcon(self.iconPath + "go-up.png"), "Move up", self)
