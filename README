@@ -1,7 +1,11 @@
-This project is work in progress. This work is based on the original obmenu program: 
+This project is work in progress and based on the original obmenu program: 
 http://obmenu.sourceforge.net 
 
 More info about license on COPYING
+
+Development executable: obmenu-qt.py
+
+Original readme file (will be updated):
 
 ==========
 OBMENU 1.0
