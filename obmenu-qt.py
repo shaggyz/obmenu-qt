@@ -4,7 +4,7 @@
 import sys, os, argparse
 from PyQt4 import QtGui, QtCore
 from ui.main import UiMainWindow
-from ui.obmenu import Ui_frmObmenu
+from ui.obmenuwidget import ObMenuWidget
 
 class ObMenuQt(object):
     """
@@ -43,8 +43,7 @@ class ObMenuQt(object):
         
         mainWindow = UiMainWindow()
 
-        frmMenu = Ui_frmObmenu()
-        frmMenu.setupUi(frmMenu)
+        frmMenu = ObMenuWidget()
         frmMenu.show()
 
         mainWindow.setCentralWidget(frmMenu)

@@ -156,3 +156,5 @@ class UiMainWindow(QtGui.QMainWindow):
         toolbar.addAction(self.menuActionMoveDown)
         toolbar.addSeparator()
         toolbar.addAction(self.menuActionDelete)
+
+        
