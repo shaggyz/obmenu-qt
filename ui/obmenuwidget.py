@@ -119,14 +119,16 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         self.txtLabel.setText(item.text(0))
         self.txtID.setText(item.text(4))
+        itemType = item.text(1)
         
         selIndex = self.cmbAction.findText(item.text(2))
-        
-        if selIndex is -1:
-            self.cmbAction.setDisabled(True)
-        else:
-            self.cmbAction.setDisabled(False)
-            self.cmbAction.setCurrentIndex(selIndex)
+        self.cmbAction.setDisabled(selIndex == -1)
+        self.cmbAction.setCurrentIndex(selIndex)
+
+        controlsDisabled = itemType == "separator"
+        self.txtLabel.setDisabled(controlsDisabled)
+        self.txtID.setDisabled(controlsDisabled)
+        self.txtExecute.setDisabled(controlsDisabled)
 
         self.txtExecute.setText(item.text(3))
 
@@ -180,6 +182,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             elif itemType == "menu":
                 self.obMenu.setMenuExecute(id, index, exe)
             
+            currentItem.setText(0, label)
+            currentItem.setText(2, action)
+            currentItem.setText(3, exe)
+            # currentItem.setText(3, exe)
+
             self.setChanged()
 
 
