@@ -40,12 +40,12 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.treeMenu.setAlternatingRowColors(True)
         self.treeMenu.setColumnWidth(0, 150)
 
-        menuFile = self.getBaseMenuFile()
+        self.filePath = self.getBaseMenuFile()
 
-        if menuFile:
+        if self.filePath:
 
             self.obMenu = ObMenu()
-            self.obMenu.loadMenu(menuFile)
+            self.obMenu.loadMenu(self.filePath)
 
             rootMenuData = self.obMenu.getMenu(None)
             rootMenuID = rootMenuData[0]["id"]
@@ -165,10 +165,24 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         # print self.treeMenu.currentItem().parent().text(0)
 
         index = self.treeMenu.currentIndex().row()
-        id = self.txtID.text()
+        id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
 
-        if len(id) < 1:
-            id = "root-menu"
+        print id + " - " + newExecute + " - " + str(index)
 
-        self.obMenu.setMenuExecute(id, index, newExecute)
+        # self.obMenu.setMenuExecute(id, index, str(newExecute))
+        self.obMenu.setItemProps(id, index, self.txtLabel.text(), self.cmbAction.currentText(), newExecute)
+        
         self.setChanged()
+
+
+    def saveChanges(self):
+        """
+        Slot: Saves changes (stored on dom object)
+        """
+        if self.changed:
+            self.obMenu.saveMenu(self.filePath)
+            self.reconfigureOpenbox()
+            self.setChanged(False)
+            self.parent().statusBar().showMessage("Changes saved", 2000)
+        else: 
+            self.parent().statusBar().showMessage("No chanches detected", 2000)

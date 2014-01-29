@@ -46,6 +46,8 @@ class ObMenu:
 	# given its ID, and its parent (or None for top-level)
 	# returns the dom tree of the menu. Recursively.
 	def _get_dom_ref(self, menu, parent):
+		print "DOMREF parent: %s menu: %s" % (parent,menu)
+
 		if not parent: parent = self.dom.documentElement
 		for item in parent.childNodes:
 			if item.nodeName == "menu":

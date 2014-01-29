@@ -4,7 +4,7 @@
 import sys, os, argparse
 from PyQt4 import QtGui, QtCore
 from ui.main import UiMainWindow
-from ui.obmenuwidget import ObMenuWidget
+
 
 class ObMenuQt(object):
     """
@@ -28,7 +28,7 @@ class ObMenuQt(object):
         
         # arguments = parser.parse_args()
 
-        # if arguments.ip:
+        # if arguments.ip:  
         #     environment.setValue("ip", arguments.ip)
         # if arguments.port:
         #     environment.seid =tValue("port", arguments.port)
@@ -42,11 +42,6 @@ class ObMenuQt(object):
         QTApp = QtGui.QApplication(sys.argv)
         
         mainWindow = UiMainWindow()
-
-        frmMenu = ObMenuWidget()
-        frmMenu.show()
-
-        mainWindow.setCentralWidget(frmMenu)
 
         # just for dev. (forces stays on top)
         mainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)

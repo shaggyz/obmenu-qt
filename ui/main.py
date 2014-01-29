@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
+from ui.obmenuwidget import ObMenuWidget
 import os
 
 class UiMainWindow(QtGui.QMainWindow):
@@ -11,8 +12,13 @@ class UiMainWindow(QtGui.QMainWindow):
         """
         super(QtGui.QMainWindow, self).__init__()
 
-        self.iconPath = os.getcwd() + "/icons/"
+        # openbox menu widget
+        self.frmMenu = ObMenuWidget()
+        self.frmMenu.show()
+        self.setCentralWidget(self.frmMenu)
 
+        # window configs
+        self.iconPath = os.getcwd() + "/icons/"
         self.setWindowTitle("Openbox menu configuration")
         self.setWindowIcon(QtGui.QIcon(self.iconPath + "mnu48.png"))
 
@@ -81,12 +87,13 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionSave = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save.png"), "Save", self)
         self.menuActionSave.setShortcut("Ctrl+S")
         self.menuActionSave.setStatusTip("Save current menu")
+        self.menuActionSave.triggered.connect(self.frmMenu.saveChanges)
 
         # Save As
         self.menuActionSaveAs = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save-as.png"), "Save As...", self)
         self.menuActionSaveAs.setShortcut("Ctrl+Shift+S")
         self.menuActionSaveAs.setStatusTip("Save menu as...")
-        
+
         # Exit
         self.menuActionQuit = QtGui.QAction(QtGui.QIcon(self.iconPath + "system-shutdown.png"), "Quit", self)
         self.menuActionQuit.setShortcut("Ctrl+Q")
