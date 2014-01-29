@@ -27,6 +27,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.cmbAction.addItems(actions)
         self.cmbAction.setDisabled(True)
 
+        self.changed = False
+
 
     def initTree(self):
         """
@@ -105,12 +107,15 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Connect internal widget signals
         """
         self.treeMenu.itemPressed.connect(self.loadItem)
-        
+        self.txtExecute.textEdited.connect(self.updateExecute)
+
 
     def loadItem(self, item, column):
         """
         Item pressed slot (loads an item on controls to edit)
         """
+        # print self.treeMenu.currentIndex().row()
+
         self.txtLabel.setText(item.text(0))
         self.txtID.setText(item.text(4))
         
@@ -123,4 +128,47 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.cmbAction.setCurrentIndex(selIndex)
 
         self.txtExecute.setText(item.text(3))
+
+
+    def reconfigureOpenbox(self):
+        """
+        Kills the openbox process
+        """
+        lines = os.popen("ps aux").read().splitlines()
+        ob = os.popen("which openbox").read().strip()
+        for line in lines:
+            if ob in " ".join(line.split()[10:]):
+                os.kill(int(line.split()[1]), 12)
+                break
+
+
+    def setChanged(self, status=True):
+        """
+        Sets the changed flag and updates window title
+        """
+        title = str(self.parent().windowTitle())
         
+        if status and self.changed is False:
+            self.parent().setWindowTitle(title + " *")
+        elif status is False and self.changed is True:        
+            newTitle = title[0:-2]
+            self.parent().setWindowTitle(newTitle)
+            
+        self.changed = status
+
+
+    def updateExecute(self, newExecute):
+        """
+        Updates the execute field of a menu item
+        """
+        nodeIndex = self.treeMenu.currentIndex()
+        # print self.treeMenu.currentItem().parent().text(0)
+
+        index = self.treeMenu.currentIndex().row()
+        id = self.txtID.text()
+
+        if len(id) < 1:
+            id = "root-menu"
+
+        self.obMenu.setMenuExecute(id, index, newExecute)
+        self.setChanged()

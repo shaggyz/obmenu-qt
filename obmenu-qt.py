@@ -31,7 +31,7 @@ class ObMenuQt(object):
         # if arguments.ip:
         #     environment.setValue("ip", arguments.ip)
         # if arguments.port:
-        #     environment.setValue("port", arguments.port)
+        #     environment.seid =tValue("port", arguments.port)
         # if arguments.debug:
         #     environment.setValue("debug", True)
         
