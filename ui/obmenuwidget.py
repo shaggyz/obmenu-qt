@@ -107,15 +107,16 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Connect internal widget signals
         """
         self.treeMenu.itemPressed.connect(self.loadItem)
-        self.txtExecute.textEdited.connect(self.updateExecute)
+        self.txtLabel.textEdited.connect(self.updateSelectedItem)
+        self.txtID.textEdited.connect(self.updateSelectedItem)
+        self.cmbAction.currentIndexChanged.connect(self.updateSelectedItem)
+        self.txtExecute.textEdited.connect(self.updateSelectedItem)
 
 
     def loadItem(self, item, column):
         """
         Item pressed slot (loads an item on controls to edit)
         """
-        # print self.treeMenu.currentIndex().row()
-
         self.txtLabel.setText(item.text(0))
         self.txtID.setText(item.text(4))
         
@@ -157,22 +158,29 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.changed = status
 
 
-    def updateExecute(self, newExecute):
+    def updateSelectedItem(self):
         """
         Updates the execute field of a menu item
         """
-        nodeIndex = self.treeMenu.currentIndex()
-        # print self.treeMenu.currentItem().parent().text(0)
+        currentItem = self.treeMenu.currentItem()
 
-        index = self.treeMenu.currentIndex().row()
-        id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
+        if currentItem:
+            nodeIndex = self.treeMenu.currentIndex()
+            index = self.treeMenu.currentIndex().row()
 
-        print id + " - " + newExecute + " - " + str(index)
+            id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
 
-        # self.obMenu.setMenuExecute(id, index, str(newExecute))
-        self.obMenu.setItemProps(id, index, self.txtLabel.text(), self.cmbAction.currentText(), newExecute)
-        
-        self.setChanged()
+            label = self.txtLabel.text()
+            action = self.cmbAction.currentText()
+            exe = self.txtExecute.text()
+            itemType = currentItem.text(1)
+
+            if itemType == "item":
+                self.obMenu.setItemProps(id, index, label, action, exe)
+            elif itemType == "menu":
+                self.obMenu.setMenuExecute(id, index, exe)
+            
+            self.setChanged()
 
 
     def saveChanges(self):
@@ -183,6 +191,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.obMenu.saveMenu(self.filePath)
             self.reconfigureOpenbox()
             self.setChanged(False)
-            self.parent().statusBar().showMessage("Changes saved", 2000)
+            self.parent().statusBar().showMessage("Changes saved", 3000)
         else: 
-            self.parent().statusBar().showMessage("No chanches detected", 2000)
+            self.parent().statusBar().showMessage("No chanches detected", 3000)
