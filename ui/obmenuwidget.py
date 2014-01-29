@@ -9,7 +9,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     """
     QtCreator generated file overload
     """
-    def __init__(self):
+    def __init__(self): 
         """
         Constructs the main window
         """
@@ -17,6 +17,15 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         
         self.setupUi(self)
         self.initTree()
+
+        # Combo options
+        actions = []
+        actions.append("Execute")
+        actions.append("Reconfigure")
+        actions.append("Restart")
+        actions.append("Exit")
+        self.cmbAction.addItems(actions)
+        self.cmbAction.setDisabled(True)
 
 
     def initTree(self):
@@ -102,8 +111,16 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         Item pressed slot (loads an item on controls to edit)
         """
-        # print "item pressed= column: %s item: %s" % (column, item.text(0))
         self.txtLabel.setText(item.text(0))
         self.txtID.setText(item.text(4))
-        #self.txtAction.text(item.text(2))
+        
+        selIndex = self.cmbAction.findText(item.text(2))
+        
+        if selIndex is -1:
+            self.cmbAction.setDisabled(True)
+        else:
+            self.cmbAction.setDisabled(False)
+            self.cmbAction.setCurrentIndex(selIndex)
+
         self.txtExecute.setText(item.text(3))
+        
