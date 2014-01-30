@@ -114,29 +114,30 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionDelete = QtGui.QAction(QtGui.QIcon(self.iconPath + "edit-delete.png"), "Delete", self)
         self.menuActionDelete.setStatusTip("Delete selected item")    
 
-        # Menu
+        # New Menu
         self.menuActionMenu = QtGui.QAction(QtGui.QIcon(self.iconPath + "archive-insert-directory.png"), "Menu", self)
         self.menuActionMenu.setIconText("New menu")
         self.menuActionMenu.setIconVisibleInMenu(False)
         self.menuActionMenu.setStatusTip("Add menu")
         
-        # Item
+        # New Item
         self.menuActionItem = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-new.png"), "Item", self)
         self.menuActionItem.setIconText("New item")
         self.menuActionItem.setIconVisibleInMenu(False)
         self.menuActionItem.setStatusTip("Add item")
+        self.menuActionItem.triggered.connect(self.frmMenu.newItem)
         
-        # Separator
+        # New Separator
         self.menuActionSeparator = QtGui.QAction(QtGui.QIcon(self.iconPath + "zoom-fit-width.png"), "Separator", self)
         self.menuActionSeparator.setIconText("New separator")
         self.menuActionSeparator.setIconVisibleInMenu(False)
         self.menuActionSeparator.setStatusTip("Add separator")
 
-        # Link
+        # New Link
         self.menuActionLink = QtGui.QAction("Link", self)
         self.menuActionLink.setStatusTip("Add link")
 
-        # Pipemenu
+        # New Pipemenu
         self.menuActionPipe = QtGui.QAction("Pipemenu", self)
         self.menuActionPipe.setStatusTip("Add pipemenu")
 

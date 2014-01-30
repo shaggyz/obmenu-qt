@@ -113,7 +113,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.txtExecute.textEdited.connect(self.updateSelectedItem)
 
 
-    def loadItem(self, item, column):
+    def loadItem(self, item, column=0):
         """
         Item pressed slot (loads an item on controls to edit)
         """
@@ -162,7 +162,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
     def updateSelectedItem(self):
         """
-        Updates the execute field of a menu item
+        Updates all the item fields on dom object
         """
         currentItem = self.treeMenu.currentItem()
 
@@ -170,24 +170,77 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             nodeIndex = self.treeMenu.currentIndex()
             index = self.treeMenu.currentIndex().row()
 
-            id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
-
-            label = self.txtLabel.text()
-            action = self.cmbAction.currentText()
-            exe = self.txtExecute.text()
-            itemType = currentItem.text(1)
+            (id, label, action, exe, itemType) = self.readItemFields()
 
             if itemType == "item":
                 self.obMenu.setItemProps(id, index, label, action, exe)
             elif itemType == "menu":
-                self.obMenu.setMenuExecute(id, index, exe)
+                # TODO: obxml fails on setMenuExecute and the 
+                #       original prog seems to not be capable 
+                #       to edit menu type items
+                #self.obMenu.setMenuExecute(id, index, exe)
+                print "bypass menu-type item edition"
+                return
             
             currentItem.setText(0, label)
             currentItem.setText(2, action)
             currentItem.setText(3, exe)
-            # currentItem.setText(3, exe)
 
             self.setChanged()
+
+
+    def readItemFields(self):
+        """
+        Returns a tuple with the item fields from edit widgets
+        """
+        currentItem = self.treeMenu.currentItem()
+
+        id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
+
+        label = self.txtLabel.text()
+        action = self.cmbAction.currentText()
+        exe = self.txtExecute.text()
+        itemType = currentItem.text(1)
+
+        return (id, label, action, exe, itemType)
+
+
+    def newItem(self):
+        """
+        Adds a new item to dom object
+        """
+        currentItem = self.treeMenu.currentItem()
+
+        label = "New Item"
+        action = "Execute"
+        exe = "command"
+
+        if len(currentItem.text(4)) < 1:
+            menu = "root-menu"
+            parent = self.rootTree
+        else: 
+            parent = currentItem
+            currentItem.text(4)
+
+        position = self.treeMenu.currentIndex().row()
+
+        # writes changes on memory
+        self.obMenu.createItem(menu, label, action, exe, position)
+
+        # new node for tree-view
+        child = QtGui.QTreeWidgetItem()
+        child.setText(0, label)
+        child.setText(1, "item")
+        child.setText(2, action)
+        child.setText(3, exe)
+        parent.insertChild(position, child)
+
+        # ui update
+        self.treeMenu.scrollToItem(child)
+        self.treeMenu.setCurrentItem(child)
+        child.setSelected(True)
+        self.loadItem(child)
+        self.setChanged()
 
 
     def saveChanges(self):
