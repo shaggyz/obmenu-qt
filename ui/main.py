@@ -113,6 +113,7 @@ class UiMainWindow(QtGui.QMainWindow):
         # Delete
         self.menuActionDelete = QtGui.QAction(QtGui.QIcon(self.iconPath + "edit-delete.png"), "Delete", self)
         self.menuActionDelete.setStatusTip("Delete selected item")    
+        self.menuActionDelete.triggered.connect(self.frmMenu.removeItem)
 
         # New Menu
         self.menuActionMenu = QtGui.QAction(QtGui.QIcon(self.iconPath + "archive-insert-directory.png"), "Menu", self)

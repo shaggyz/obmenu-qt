@@ -243,6 +243,28 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.setChanged()
 
 
+    def removeItem(self):
+        """
+        Remove current item (only on dom memory)
+        """
+        currentItem = self.treeMenu.currentItem()
+        position = self.treeMenu.currentIndex().row()
+        
+        if len(currentItem.text(4)) < 1:
+            menu = "root-menu"
+            parent = self.rootTree
+        else: 
+            parent = currentItem
+            currentItem.text(4)
+
+        print "Item on position %s from menu-id %s will be removed" % (position, menu)
+        self.obMenu.removeItem(menu, position)
+
+        parent.removeChild(currentItem)
+
+        self.setChanged()
+
+
     def saveChanges(self):
         """
         Slot: Saves changes (stored on dom object)
