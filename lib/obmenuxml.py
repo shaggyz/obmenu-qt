@@ -72,43 +72,130 @@ class ObMenuXml(object):
         """
         return node.tag is etree.Comment
 
+    def edit_item(self, type_, parent_id=None, index=0, label=None, action=None, execute_=None, icon=None, new_id=None):
+        """
+        Edit a menu item
+        """
+        if "separator" == type_:
+            return 
+
+        item = self._get_item(type_, index, parent_id)
+
+        if isinstance(item, etree._Element):
+            if label is not None:
+                item.set("label", label)
+            if icon is not None:
+                item.set("label", icon)
+            if new_id is not None:
+                item.set("id", new_id)
+            if "item" == type_:
+                if action is not None:
+                    action_item = self._get_item_element("action", item)
+                    action_item.set("name", action)
+                if execute_ is not None:
+                    execute_item = self._get_item_element("execute", item)
+                    execute_item.text = execute_
+
+            return True
+
+        return False
+
+    def _get_item(self, type_, index, parent_id=None):
+        """
+        Search and get a certain node from tree
+        """
+        if parent_id is None:
+            parent_id = "root-menu"
+
+        submenu = self._get_submenu(parent_id)
+
+        for element in submenu.iter("{http://openbox.org/}" + type_):
+            element_index = element.getparent().index(element)
+            if element_index == index:
+                return element
+
+    def _get_submenu(self, id, parent=None):
+        """
+        Returns a submenu from his id
+        """
+        if parent is None:
+            parent = self.menu
+
+        for element in parent.iter("{http://openbox.org/}menu"):
+            if element.get("id") == id:
+                return element
+
+    def _get_item_element(self, element_name, item):
+        """
+        Return an item element from his name
+        """
+        if len(item):
+            for element in item.iter("*"):
+                if element_name == self.get_item_tag(element):
+                    return element
+
+    def save_menu(self, file_path=None):
+        """
+        Saves the current xml loaded on memory to a file 
+        If file file path is none the current file will be overwritten
+        """
+        try:
+            if file_path is None:
+                file_path = self.file_path
+            self.tree.write(file_path)
+            return True
+        except Exception, e:
+            print e
+            return False
+
     def debug(self):
         """
         Tests and debugs
         """
         root = self.tree.getroot()
 
-        print "=== root ===\n"
-        print "tag: " + root.xpath('local-name()')
-        print "with %i children" % (len(root))
+        # print "=== root ===\n"
+        # print "tag: " + root.xpath('local-name()')
+        # print "with %i children" % (len(root))
 
-        print "\n=== menu ===\n"
-        print "with %i children" % (len(self.menu))
-        print "tag: " + self.menu.xpath('local-name()')
-        print "id: " + self.menu.get("id")
-        print "label: " + self.menu.get("label")
+        # print "\n=== menu ===\n"
+        # print "with %i children" % (len(self.menu))
+        # print "tag: " + self.menu.xpath('local-name()')
+        # print "id: " + self.menu.get("id")
+        # print "label: " + self.menu.get("label")
 
-        print "\n=== items ===\n"
-        for element in self.menu:
-            if self.is_comment(element):
-                continue
-            print "--- %s ---" % (self.get_item_tag(element))
+        # self._get_node("item", None)
+        # self._get_submenu("/Debian")
+        # item = self._get_item("item", 3)
+        self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
+        item = self._get_item("item", 2)
 
-            print "\t\t--- children: ---"
-            for child in element:
-                print "\t\t--- %s ---" % (self.get_item_tag(child))
+        # action_item = self._get_item_element("execute", item)
+        self.save_menu()
 
-        print "\n"
+        # print etree.tostring(item, pretty_print=True)
+        # print etree.tostring(action_item, pretty_print=True)
+        
 
+        # print "\n=== items ===\n"
+        # for element in self.menu:
+        #     if self.is_comment(element):
+        #         continue
+        #     print "--- %s ---" % (self.get_item_tag(element))
+
+        #     print "\t\t--- children: ---"
+        #     for child in element:
+        #         print "\t\t--- %s ---" % (self.get_item_tag(child))
+
+        # print "\n"
 
 
 """
 Static application entry poiny
 """
 if __name__ == "__main__":
-    app = ObMenuXml("/home/shaggyz/menu.xml")
-    print "Resultado load_xml: %i" % (app.load_xml())
-
+    app = ObMenuXml("/home/shaggyz/Desarrollo/python/obmenu-1.0/tests/menu.xml")
+    app.load_xml()
 
 
 

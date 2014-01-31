@@ -60,10 +60,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.rootTree.setText(1, self.obMenu.get_item_tag(menu))
             self.rootTree.setText(4, menu.get("id"))
 
-
             # children items
             self.loadMenu(menu)
-            return
 
             self.rootTree.setExpanded(True)
 
@@ -145,7 +143,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
     def loadItem(self, item, column=0):
         """
-        Item pressed slot (loads an item on controls to edit)
+        Item pressed slot (loads an item on controls for edition)
         """
         self.txtLabel.setText(item.text(0))
         self.txtID.setText(item.text(4))
