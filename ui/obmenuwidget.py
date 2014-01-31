@@ -2,7 +2,7 @@
 
 from PyQt4 import QtGui
 from ui.obmenu import Ui_frmObmenu
-from obxml import ObMenu
+from lib.obmenuxml import ObMenuXml
 import os
 
 class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
@@ -44,19 +44,26 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         if self.filePath:
 
-            self.obMenu = ObMenu()
-            self.obMenu.loadMenu(self.filePath)
-
-            rootMenuData = self.obMenu.getMenu(None)
-            rootMenuID = rootMenuData[0]["id"]
+            self.obMenu = ObMenuXml(self.filePath)
+            
+            if not self.obMenu.load_xml():
+                # TODO: QMessageBox here
+                print "Error during xml load"
+                return
+            
+            menu = self.obMenu.get_menu()
+            menu_id = menu.get("id")
 
             # tree root
             self.rootTree = QtGui.QTreeWidgetItem(self.treeMenu)
-            self.rootTree.setText(0, rootMenuData[0]["label"])
-            self.rootTree.setText(1, rootMenuData[0]["type"])
+            self.rootTree.setText(0, menu.get("label"))
+            self.rootTree.setText(1, self.obMenu.get_item_tag(menu))
+            self.rootTree.setText(4, menu.get("id"))
+
 
             # children items
-            self.loadMenu(rootMenuID, self.rootTree)
+            self.loadMenu(menu)
+            return
 
             self.rootTree.setExpanded(True)
 
@@ -64,34 +71,57 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.connectSignals()
 
 
-    def loadMenu(self, parentID, parentItem):
+    def loadMenu(self, menu, parent=None):
         """
-        Loads given menu on QTreeWidget
+        Iterates over all the menu nodes recursively 
+        and creates the items for QTreeWidget
         """
-        menuData = self.obMenu.getMenu(parentID)
+        if parent is None:
+            parent = self.rootTree
 
-        if menuData:
-            for it in menuData:
+        if len(menu):
+            for element in menu:
+                if self.obMenu.is_comment(element):
+                    continue
+                
+                child = QtGui.QTreeWidgetItem(parent)
+                item_type = self.obMenu.get_item_tag(element)
 
-                child = QtGui.QTreeWidgetItem(parentItem)
+                # label
+                if "label" in element.keys():
+                    child.setText(0, element.get("label"))
 
-                if it.has_key("label"):    
-                    child.setText(0, it["label"])
-                if it.has_key("type"):
-                    child.setText(1, it["type"])
-                if it.has_key("action"):
-                    child.setText(2, it["action"])
-                if it.has_key("execute"):                
-                    child.setText(3, it["execute"])
-                if it.has_key("id"):
-                    child.setText(4, it["id"])
+                # type
+                child.setText(1, item_type)
 
+                # label
+                if "id" in element.keys():
+                    child.setText(4, element.get("id"))
+
+                if item_type == "menu":
+                    # menu elements use id as label
+                    child.setText(0, element.get("id"))
+                    # TODO: iterate submenu elements
+                if item_type == "item":
+                    
+                    # we need to find actions
+                    if len(element):
+                        action = element[0]
+                        child.setText(2, action.get("name"))
+
+                        # action childs
+                        if len(action):
+                            for item in action:
+                                # execute
+                                if self.obMenu.get_item_tag(item) == "execute":
+                                    child.setText(3, item.text)
 
     def getBaseMenuFile(self):
         """
         Gets the main openbox menu file
         """
-        menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
+        # menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
+        menu_path = os.getenv("HOME") + "/menu.xml"
 
         if not os.path.isfile(menu_path):
             QtGui.QMessageBox.warning(self, 
