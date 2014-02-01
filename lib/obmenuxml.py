@@ -26,12 +26,9 @@ class ObMenuXml(object):
 
             root = self.get_root()
             self.menu = root[0]
-            # self.debug()
-
             return True
 
         except (IOError, Exception), e:
-            print e
             return False
 
     def get_tree(self):
@@ -103,13 +100,10 @@ class ObMenuXml(object):
 
         return False
 
-    def _get_item(self, type_, index, parent_id=None):
+    def _get_item(self, type_, index, parent_id="root-menu"):
         """
         Search and get a certain node from tree
         """
-        if parent_id is None:
-            parent_id = "root-menu"
-
         submenu = self._get_submenu(parent_id)
 
         for element in submenu.iter("{http://openbox.org/}" + type_):
@@ -152,20 +146,16 @@ class ObMenuXml(object):
             print e
             return False
 
-    def add_item(self, label, execute_, action="Execute", parent_id=None, index=0):
+    def add_item(self, label, execute_, action="Execute", parent_id="root-menu", index=0):
         """
         Adds a new item to menu
         """
-        if parent_id is None:
-            parent_id = "root-menu"
-
         item = self._create_item(label, execute_, action)
 
         parent = self._get_submenu(parent_id)
         parent.insert(index, item)
 
-
-    def add_submenu(self, id, label, parent_id=None, index=0):
+    def add_submenu(self, id, label, parent_id="root-menu", index=0):
         """
         Adds a new menu
         """
@@ -176,19 +166,13 @@ class ObMenuXml(object):
         
         menu_item.append(self._create_item("New item", "command", "Execute"))
 
-        if parent_id is None:
-            parent_id = "root-menu"
-
         parent = self._get_submenu(parent_id)
         parent.insert(index, menu_item)
 
-    def add_separator(self, parent_id=None, index=0):
+    def add_separator(self, parent_id="root-menu", index=0):
         """
         Add a new separator
         """
-        if parent_id is None:
-            parent_id = "root-menu"
-
         separator = etree.Element("separator")
         parent = self._get_submenu(parent_id)
 
@@ -214,17 +198,11 @@ class ObMenuXml(object):
 
         return item
 
-    def move_item(self, type_, orig_index, dest_index, dest_parent_id=None, orig_parent_id=None):
+    def move_item(self, type_, orig_index, dest_index, dest_parent_id="root-menu", orig_parent_id="root-menu"):
         """
         Moves an item position on menu
         """
         item = self._get_item(type_, orig_index, orig_parent_id)
-
-        if orig_parent_id is None:
-            orig_parent_id = "root-menu"
-
-        if dest_parent_id is None:
-            dest_parent_id = "root-menu"
 
         dest_parent = self._get_submenu(dest_parent_id)
         orig_parent = self._get_submenu(orig_parent_id)
@@ -234,13 +212,10 @@ class ObMenuXml(object):
 
         dest_parent.insert(dest_index, clone)
 
-    def remove_item(self, type_, index, parent_id=None):
+    def remove_item(self, type_, index, parent_id="root-menu"):
         """
         Removes an item from menu
         """
-        if parent_id is None:
-            parent_id = "root-menu"
-
         parent = self._get_submenu(parent_id)
         item = self._get_item(type_, index, parent_id)
 
@@ -249,64 +224,5 @@ class ObMenuXml(object):
             return True
         else:
             return False
-
-
-    def debug(self):
-        """
-        Tests and debugs
-        """
-        root = self.tree.getroot()
-
-        # print "=== root ===\n"
-        # print "tag: " + root.xpath('local-name()')
-        # print "with %i children" % (len(root))
-
-        # print "\n=== menu ===\n"
-        # print "with %i children" % (len(self.menu))
-        # print "tag: " + self.menu.xpath('local-name()')
-        # print "id: " + self.menu.get("id")
-        # print "label: " + self.menu.get("label")
-
-        # self._get_node("item", None)
-        # self._get_submenu("/Debian")
-        # item = self._get_item("item", 3)
-        # self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
-        # item = self._get_item("item", 2)
-
-        # self.add_item(u"Camaron", "comando", index=3)
-        
-        # self.add_submenu("SUBMENU", "El submenu")
-        # self.add_separator(index=2, parent_id="sub-menu")
-
-        # action_item = self._get_item_element("execute", item)
-        # self.move_item("item", 0, 0, "SUBMENU")
-        
-        self.remove_item("item", 1, "sub-menu")
-        self.save_menu()
-
-        # print etree.tostring(item, pretty_print=True)
-        # print etree.tostring(action_item, pretty_print=True)
-        
-
-        # print "\n=== items ===\n"
-        # for element in self.menu:
-        #     if self.is_comment(element):
-        #         continue
-        #     print "--- %s ---" % (self.get_item_tag(element))
-
-        #     print "\t\t--- children: ---"
-        #     for child in element:
-        #         print "\t\t--- %s ---" % (self.get_item_tag(child))
-
-        # print "\n"
-
-
-"""
-Static application entry poiny
-"""
-if __name__ == "__main__":
-    app = ObMenuXml("/Users/shaggyz/menu.xml")
-    app.load_xml()
-
 
 

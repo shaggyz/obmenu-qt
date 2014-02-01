@@ -16,7 +16,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         super(QtGui.QWidget, self).__init__()
         
         self.setupUi(self)
-        self.initTree()
+        self.init_tree()
 
         # Combo options
         actions = []
@@ -30,7 +30,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.changed = False
 
 
-    def initTree(self):
+    def init_tree(self):
         """
         Configures the tree initial state
         """
@@ -40,50 +40,50 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.treeMenu.setAlternatingRowColors(True)
         self.treeMenu.setColumnWidth(0, 150)
 
-        self.filePath = self.getBaseMenuFile()
+        self.filePath = self.get_base_menu_file()
 
         if self.filePath:
 
-            self.obMenu = ObMenuXml(self.filePath)
+            self.ob_menu = ObMenuXml(self.filePath)
             
-            if not self.obMenu.load_xml():
+            if not self.ob_menu.load_xml():
                 # TODO: QMessageBox here
                 print "Error during xml load"
                 return
             
-            menu = self.obMenu.get_menu()
+            menu = self.ob_menu.get_menu()
             menu_id = menu.get("id")
 
             # tree root
-            self.rootTree = QtGui.QTreeWidgetItem(self.treeMenu)
-            self.rootTree.setText(0, menu.get("label"))
-            self.rootTree.setText(1, self.obMenu.get_item_tag(menu))
-            self.rootTree.setText(4, menu.get("id"))
+            self.root_tree = QtGui.QTreeWidgetItem(self.treeMenu)
+            self.root_tree.setText(0, menu.get("label"))
+            self.root_tree.setText(1, self.ob_menu.get_item_tag(menu))
+            self.root_tree.setText(4, menu.get("id"))
 
             # children items
-            self.loadMenu(menu)
+            self.load_menu(menu)
 
-            self.rootTree.setExpanded(True)
+            self.root_tree.setExpanded(True)
 
             # signal connections
-            self.connectSignals()
+            self.connect_signals()
 
 
-    def loadMenu(self, menu, parent=None):
+    def load_menu(self, menu, parent=None):
         """
         Iterates over all the menu nodes recursively 
         and creates the items for QTreeWidget
         """
         if parent is None:
-            parent = self.rootTree
+            parent = self.root_tree
 
         if len(menu):
             for element in menu:
-                if self.obMenu.is_comment(element):
+                if self.ob_menu.is_comment(element):
                     continue
                 
                 child = QtGui.QTreeWidgetItem(parent)
-                item_type = self.obMenu.get_item_tag(element)
+                item_type = self.ob_menu.get_item_tag(element)
 
                 # label
                 if "label" in element.keys():
@@ -100,6 +100,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     # menu elements use id as label
                     child.setText(0, element.get("id"))
                     # TODO: iterate submenu elements
+                    if len(element):
+                        self.load_menu(element, child)
                 if item_type == "item":
                     
                     # we need to find actions
@@ -111,10 +113,10 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                         if len(action):
                             for item in action:
                                 # execute
-                                if self.obMenu.get_item_tag(item) == "execute":
+                                if self.ob_menu.get_item_tag(item) == "execute":
                                     child.setText(3, item.text)
 
-    def getBaseMenuFile(self):
+    def get_base_menu_file(self):
         """
         Gets the main openbox menu file
         """
@@ -130,38 +132,38 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         return menu_path
 
 
-    def connectSignals(self):
+    def connect_signals(self):
         """
         Connect internal widget signals
         """
-        self.treeMenu.itemPressed.connect(self.loadItem)
-        self.txtLabel.textEdited.connect(self.updateSelectedItem)
-        self.txtID.textEdited.connect(self.updateSelectedItem)
-        self.cmbAction.currentIndexChanged.connect(self.updateSelectedItem)
-        self.txtExecute.textEdited.connect(self.updateSelectedItem)
+        self.treeMenu.itemPressed.connect(self.load_item)
+        self.txtLabel.textEdited.connect(self.update_selected_item)
+        self.txtID.textEdited.connect(self.update_selected_item)
+        self.cmbAction.currentIndexChanged.connect(self.update_selected_item)
+        self.txtExecute.textEdited.connect(self.update_selected_item)
 
 
-    def loadItem(self, item, column=0):
+    def load_item(self, item, column=0):
         """
         Item pressed slot (loads an item on controls for edition)
         """
         self.txtLabel.setText(item.text(0))
         self.txtID.setText(item.text(4))
-        itemType = item.text(1)
+        item_type = item.text(1)
         
         selIndex = self.cmbAction.findText(item.text(2))
         self.cmbAction.setDisabled(selIndex == -1)
         self.cmbAction.setCurrentIndex(selIndex)
 
-        controlsDisabled = itemType == "separator"
-        self.txtLabel.setDisabled(controlsDisabled)
-        self.txtID.setDisabled(controlsDisabled)
-        self.txtExecute.setDisabled(controlsDisabled)
+        controls_disabled = item_type == "separator"
+        self.txtLabel.setDisabled(controls_disabled)
+        self.txtID.setDisabled(controls_disabled)
+        self.txtExecute.setDisabled(controls_disabled)
 
         self.txtExecute.setText(item.text(3))
 
 
-    def reconfigureOpenbox(self):
+    def reconfigure_openbox(self):
         """
         Kills the openbox process
         """
@@ -173,7 +175,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 break
 
 
-    def setChanged(self, status=True):
+    def set_changed(self, status=True):
         """
         Sets the changed flag and updates window title
         """
@@ -188,72 +190,72 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.changed = status
 
 
-    def updateSelectedItem(self):
+    def update_selected_item(self):
         """
         Updates all the item fields on dom object
         """
-        currentItem = self.treeMenu.currentItem()
+        current_item = self.treeMenu.currentItem()
 
-        if currentItem:
+        if current_item:
             nodeIndex = self.treeMenu.currentIndex()
             index = self.treeMenu.currentIndex().row()
 
-            (id, label, action, exe, itemType) = self.readItemFields()
+            (id, label, action, exe, item_type) = self.read_item_fields()
 
-            if itemType == "item":
-                self.obMenu.setItemProps(id, index, label, action, exe)
-            elif itemType == "menu":
+            if item_type == "item":
+                self.ob_menu.setItemProps(id, index, label, action, exe)
+            elif item_type == "menu":
                 # TODO: obxml fails on setMenuExecute and the 
                 #       original prog seems to not be capable 
                 #       to edit menu type items
-                #self.obMenu.setMenuExecute(id, index, exe)
+                #self.ob_menu.setMenuExecute(id, index, exe)
                 print "bypass menu-type item edition"
                 return
             
-            currentItem.setText(0, label)
-            currentItem.setText(2, action)
-            currentItem.setText(3, exe)
+            current_item.setText(0, label)
+            current_item.setText(2, action)
+            current_item.setText(3, exe)
 
-            self.setChanged()
+            self.set_changed()
 
 
-    def readItemFields(self):
+    def read_item_fields(self):
         """
         Returns a tuple with the item fields from edit widgets
         """
-        currentItem = self.treeMenu.currentItem()
+        current_item = self.treeMenu.currentItem()
 
         id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
 
         label = self.txtLabel.text()
         action = self.cmbAction.currentText()
         exe = self.txtExecute.text()
-        itemType = currentItem.text(1)
+        item_type = current_item.text(1)
 
-        return (id, label, action, exe, itemType)
+        return (id, label, action, exe, item_type)
 
 
-    def newItem(self):
+    def new_item(self):
         """
         Adds a new item to dom object
         """
-        currentItem = self.treeMenu.currentItem()
+        current_item = self.treeMenu.current_item()
 
         label = "New Item"
         action = "Execute"
         exe = "command"
 
-        if len(currentItem.text(4)) < 1:
+        if len(current_item.text(4)) < 1:
             menu = "root-menu"
-            parent = self.rootTree
+            parent = self.root_tree
         else: 
-            parent = currentItem
-            currentItem.text(4)
+            parent = current_item
+            current_item.text(4)
 
         position = self.treeMenu.currentIndex().row()
 
         # writes changes on memory
-        self.obMenu.createItem(menu, label, action, exe, position)
+        self.ob_menu.createItem(menu, label, action, exe, position)
 
         # new node for tree-view
         child = QtGui.QTreeWidgetItem()
@@ -265,42 +267,43 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         # ui update
         self.treeMenu.scrollToItem(child)
-        self.treeMenu.setCurrentItem(child)
+        self.treeMenu.setcurrent_item(child)
         child.setSelected(True)
-        self.loadItem(child)
-        self.setChanged()
+        self.load_item(child)
+        self.set_changed()
 
 
-    def removeItem(self):
+    def remove_item(self):
         """
         Remove current item (only on dom memory)
         """
-        currentItem = self.treeMenu.currentItem()
+        current_item = self.treeMenu.current_item()
         position = self.treeMenu.currentIndex().row()
         
-        if len(currentItem.text(4)) < 1:
+        if len(current_item.text(4)) < 1:
             menu = "root-menu"
-            parent = self.rootTree
+            parent = self.root_tree
         else: 
-            parent = currentItem
-            currentItem.text(4)
+            parent = current_item
+            current_item.text(4)
 
         print "Item on position %s from menu-id %s will be removed" % (position, menu)
-        self.obMenu.removeItem(menu, position)
+        self.ob_menu.remove_item(menu, position)
 
-        parent.removeChild(currentItem)
+        parent.removeChild(current_item)
 
-        self.setChanged()
+        self.set_changed()
 
 
-    def saveChanges(self):
+    def save_changes(self):
         """
         Slot: Saves changes (stored on dom object)
         """
         if self.changed:
-            self.obMenu.saveMenu(self.filePath)
-            self.reconfigureOpenbox()
-            self.setChanged(False)
+            self.ob_menu.saveMenu(self.filePath)
+            self.reconfigure_openbox()
+            self.set_changed(False)
             self.parent().statusBar().showMessage("Changes saved", 3000)
         else: 
             self.parent().statusBar().showMessage("No chanches detected", 3000)
+

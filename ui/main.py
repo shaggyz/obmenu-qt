@@ -87,7 +87,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionSave = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save.png"), "Save", self)
         self.menuActionSave.setShortcut("Ctrl+S")
         self.menuActionSave.setStatusTip("Save current menu")
-        self.menuActionSave.triggered.connect(self.frmMenu.saveChanges)
+        self.menuActionSave.triggered.connect(self.frmMenu.save_changes)
 
         # Save As
         self.menuActionSaveAs = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save-as.png"), "Save As...", self)
@@ -113,7 +113,7 @@ class UiMainWindow(QtGui.QMainWindow):
         # Delete
         self.menuActionDelete = QtGui.QAction(QtGui.QIcon(self.iconPath + "edit-delete.png"), "Delete", self)
         self.menuActionDelete.setStatusTip("Delete selected item")    
-        self.menuActionDelete.triggered.connect(self.frmMenu.removeItem)
+        self.menuActionDelete.triggered.connect(self.frmMenu.remove_item)
 
         # New Menu
         self.menuActionMenu = QtGui.QAction(QtGui.QIcon(self.iconPath + "archive-insert-directory.png"), "Menu", self)
@@ -126,7 +126,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionItem.setIconText("New item")
         self.menuActionItem.setIconVisibleInMenu(False)
         self.menuActionItem.setStatusTip("Add item")
-        self.menuActionItem.triggered.connect(self.frmMenu.newItem)
+        self.menuActionItem.triggered.connect(self.frmMenu.new_item)
         
         # New Separator
         self.menuActionSeparator = QtGui.QAction(QtGui.QIcon(self.iconPath + "zoom-fit-width.png"), "Separator", self)
