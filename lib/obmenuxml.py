@@ -26,7 +26,7 @@ class ObMenuXml(object):
 
             root = self.get_root()
             self.menu = root[0]
-            self.debug()
+            # self.debug()
 
             return True
 
@@ -226,11 +226,29 @@ class ObMenuXml(object):
         if dest_parent_id is None:
             dest_parent_id = "root-menu"
 
-        parent = self._get_submenu(dest_parent_id)
-        clone = copy.deepcopy(item)
-        item.clear()
+        dest_parent = self._get_submenu(dest_parent_id)
+        orig_parent = self._get_submenu(orig_parent_id)
 
-        parent.insert(dest_index, clone)
+        clone = copy.deepcopy(item)
+        orig_parent.remove(item)
+
+        dest_parent.insert(dest_index, clone)
+
+    def remove_item(self, type_, index, parent_id=None):
+        """
+        Removes an item from menu
+        """
+        if parent_id is None:
+            parent_id = "root-menu"
+
+        parent = self._get_submenu(parent_id)
+        item = self._get_item(type_, index, parent_id)
+
+        if isinstance(item, etree._Element):
+            parent.remove(item)
+            return True
+        else:
+            return False
 
 
     def debug(self):
@@ -262,7 +280,9 @@ class ObMenuXml(object):
 
         # action_item = self._get_item_element("execute", item)
         # self.move_item("item", 0, 0, "SUBMENU")
-        # self.save_menu()
+        
+        self.remove_item("item", 1, "sub-menu")
+        self.save_menu()
 
         # print etree.tostring(item, pretty_print=True)
         # print etree.tostring(action_item, pretty_print=True)
