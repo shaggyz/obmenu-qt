@@ -22,7 +22,7 @@ class ObMenuXml(object):
         try:
             parser = etree.XMLParser(remove_blank_text=True)
             self.tree = etree.parse(self.file_path, parser)
-            
+
             root = self.get_root()
             self.menu = root[0]
             self.debug()
@@ -158,6 +158,33 @@ class ObMenuXml(object):
         if parent_id is None:
             parent_id = "root-menu"
 
+        item = self._create_item(label, execute_, action)
+
+        parent = self._get_submenu(parent_id)
+        parent.insert(index, item)
+
+
+    def add_submenu(self, id, label, parent_id=None, index=0):
+        """
+        Adds a new menu
+        """
+        menu_item = etree.Element("menu")
+        menu_item.set("id", id)
+        menu_item.set("label", label)
+        # TODO: icon here
+        
+        menu_item.append(self._create_item("New item", "command", "Execute"))
+
+        if parent_id is None:
+            parent_id = "root-menu"
+
+        parent = self._get_submenu(parent_id)
+        parent.insert(index, menu_item)
+
+    def _create_item(self, label, execute_, action):
+        """
+        Returns an item node with default values
+        """
         item = etree.Element("item")
         item.set("label", label)
         # TODO: icon here
@@ -170,8 +197,7 @@ class ObMenuXml(object):
         action_item.append(execute_item)
         item.append(action_item)
 
-        parent = self._get_submenu(parent_id)
-        parent.insert(index, item)
+        return item
 
     def debug(self):
         """
@@ -195,7 +221,9 @@ class ObMenuXml(object):
         # self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
         # item = self._get_item("item", 2)
 
-        self.add_item(u"Añadido", "comando", index=3)
+        # self.add_item(u"Camaron", "comando", index=3)
+        
+        self.add_submenu("SUBMENU", "El submenu")
 
         # action_item = self._get_item_element("execute", item)
         self.save_menu()
