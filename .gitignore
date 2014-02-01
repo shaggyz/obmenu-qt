@@ -1,3 +1,4 @@
 *.pyc
 .directory
 *.original
+.DS_*

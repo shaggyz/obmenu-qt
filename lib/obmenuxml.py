@@ -20,7 +20,9 @@ class ObMenuXml(object):
         Loads xml on element tree object
         """
         try:
-            self.tree = etree.parse(self.file_path)
+            parser = etree.XMLParser(remove_blank_text=True)
+            self.tree = etree.parse(self.file_path, parser)
+            
             root = self.get_root()
             self.menu = root[0]
             self.debug()
@@ -142,7 +144,8 @@ class ObMenuXml(object):
         try:
             if file_path is None:
                 file_path = self.file_path
-            self.tree.write(file_path)
+
+            self.tree.write(file_path, pretty_print=True)
             return True
         except Exception, e:
             print e
@@ -192,7 +195,7 @@ class ObMenuXml(object):
         # self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
         # item = self._get_item("item", 2)
 
-        self.add_item("label", "execute", index=3)
+        self.add_item(u"Añadido", "comando", index=3)
 
         # action_item = self._get_item_element("execute", item)
         self.save_menu()
@@ -218,7 +221,7 @@ class ObMenuXml(object):
 Static application entry poiny
 """
 if __name__ == "__main__":
-    app = ObMenuXml("/home/shaggyz/menu.xml")
+    app = ObMenuXml("/Users/shaggyz/menu.xml")
     app.load_xml()
 
 
