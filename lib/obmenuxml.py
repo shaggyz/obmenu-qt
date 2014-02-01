@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lxml import etree
+import copy
 
 class ObMenuXml(object):
     """
@@ -213,6 +214,25 @@ class ObMenuXml(object):
 
         return item
 
+    def move_item(self, type_, orig_index, dest_index, dest_parent_id=None, orig_parent_id=None):
+        """
+        Moves an item position on menu
+        """
+        item = self._get_item(type_, orig_index, orig_parent_id)
+
+        if orig_parent_id is None:
+            orig_parent_id = "root-menu"
+
+        if dest_parent_id is None:
+            dest_parent_id = "root-menu"
+
+        parent = self._get_submenu(dest_parent_id)
+        clone = copy.deepcopy(item)
+        item.clear()
+
+        parent.insert(dest_index, clone)
+
+
     def debug(self):
         """
         Tests and debugs
@@ -241,6 +261,7 @@ class ObMenuXml(object):
         # self.add_separator(index=2, parent_id="sub-menu")
 
         # action_item = self._get_item_element("execute", item)
+        # self.move_item("item", 0, 0, "SUBMENU")
         # self.save_menu()
 
         # print etree.tostring(item, pretty_print=True)
