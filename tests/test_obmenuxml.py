@@ -42,6 +42,3 @@ class TestObMenuXml(unittest.TestCase):
         element = self.ob._get_item_element("action", item)
         self.assertIsInstance(item, etree._Element)
         self.assertEqual(element.get("name"), "Execute")
-
-    def test_save_menu(self):
-        self.assertTrue(self.ob.save_menu())

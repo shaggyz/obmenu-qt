@@ -154,8 +154,21 @@ class ObMenuXml(object):
         """
         if parent_id is None:
             parent_id = "root-menu"
+
+        item = etree.Element("item")
+        item.set("label", label)
+        # TODO: icon here
+
+        action_item = etree.Element("action")
+        action_item.set("name", action)
+
+        execute_item = etree.Element("execute")
+        execute_item.text = execute_
+        action_item.append(execute_item)
+        item.append(action_item)
+
         parent = self._get_submenu(parent_id)
-        parent.insert(index, etree.Element("pijarron"))
+        parent.insert(index, item)
 
     def debug(self):
         """
@@ -176,10 +189,10 @@ class ObMenuXml(object):
         # self._get_node("item", None)
         # self._get_submenu("/Debian")
         # item = self._get_item("item", 3)
-        self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
-        item = self._get_item("item", 2)
+        # self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
+        # item = self._get_item("item", 2)
 
-        self.add_item("label", "execute")
+        self.add_item("label", "execute", index=3)
 
         # action_item = self._get_item_element("execute", item)
         self.save_menu()
@@ -205,7 +218,7 @@ class ObMenuXml(object):
 Static application entry poiny
 """
 if __name__ == "__main__":
-    app = ObMenuXml("/home/shaggyz/Desarrollo/python/obmenu-1.0/tests/menu.xml")
+    app = ObMenuXml("/home/shaggyz/menu.xml")
     app.load_xml()
 
 

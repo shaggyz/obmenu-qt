@@ -2,16 +2,16 @@
 	<menu id="root-menu" label="Openbox 3">
 		<item icon="/usr/share/icons/default.kde4/22x22/apps/utilities-terminal.png" label="New Terminal">
 			<action name="Execute">
-				<execute>x-terminal-emulator</execute>
+				<execute>format C:</execute>
 			</action>
 		</item>
-		<item icon="/usr/share/icons/default.kde4/22x22/apps/system-file-manager.png" label="File Manager">
+		<item icon="/usr/share/icons/default.kde4/22x22/apps/system-file-manager.png" label="File manager">
 			<action name="Execute">
-				<execute>dolphin</execute>
+				<execute>format C:</execute>
 			</action>
 		</item>
-		<item icon="/opt/thunderbird/chrome/icons/default/default22.png" label="El cliente de correo">
-			<action name="Terminate">
+		<item icon="/opt/thunderbird/chrome/icons/default/default22.png" label="Thunderbird">
+			<action name="Execute">
 				<execute>format C:</execute>
 			</action>
 		</item>
@@ -36,9 +36,9 @@
 					<execute>firefox</execute>
 				</action>
 			</item>
-			<item icon="/home/shaggyz/Im&#225;genes/Iconos/firefox-original.png" label="Web browser">
-				<action name="Execute">
-					<execute>firefox</execute>
+			<item icon="/home/shaggyz/Im&#225;genes/Iconos/firefox-original.png" label="El cliente de correo">
+				<action name="Terminate">
+					<execute>format C:</execute>
 				</action>
 			</item>
 			<menu id="sub-sub-menu" label="Sub Menu">
