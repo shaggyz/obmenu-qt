@@ -181,6 +181,20 @@ class ObMenuXml(object):
         parent = self._get_submenu(parent_id)
         parent.insert(index, menu_item)
 
+    def add_separator(self, parent_id=None, index=0):
+        """
+        Add a new separator
+        """
+        if parent_id is None:
+            parent_id = "root-menu"
+
+        separator = etree.Element("separator")
+        parent = self._get_submenu(parent_id)
+
+        # index must be incressed to be placed bottom
+        parent.insert(index + 1, separator)
+
+
     def _create_item(self, label, execute_, action):
         """
         Returns an item node with default values
@@ -223,10 +237,11 @@ class ObMenuXml(object):
 
         # self.add_item(u"Camaron", "comando", index=3)
         
-        self.add_submenu("SUBMENU", "El submenu")
+        # self.add_submenu("SUBMENU", "El submenu")
+        # self.add_separator(index=2, parent_id="sub-menu")
 
         # action_item = self._get_item_element("execute", item)
-        self.save_menu()
+        # self.save_menu()
 
         # print etree.tostring(item, pretty_print=True)
         # print etree.tostring(action_item, pretty_print=True)
