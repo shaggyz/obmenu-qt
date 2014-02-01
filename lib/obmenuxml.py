@@ -148,6 +148,15 @@ class ObMenuXml(object):
             print e
             return False
 
+    def add_item(self, label, execute_, action="Execute", parent_id=None, index=0):
+        """
+        Adds a new item to menu
+        """
+        if parent_id is None:
+            parent_id = "root-menu"
+        parent = self._get_submenu(parent_id)
+        parent.insert(index, etree.Element("pijarron"))
+
     def debug(self):
         """
         Tests and debugs
@@ -169,6 +178,8 @@ class ObMenuXml(object):
         # item = self._get_item("item", 3)
         self.edit_item(type_="item", index=2, label="El cliente de correo", action="Terminate", execute_="format C:")
         item = self._get_item("item", 2)
+
+        self.add_item("label", "execute")
 
         # action_item = self._get_item_element("execute", item)
         self.save_menu()
