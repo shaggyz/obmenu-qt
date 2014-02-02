@@ -120,6 +120,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionMenu.setIconText("New menu")
         self.menuActionMenu.setIconVisibleInMenu(False)
         self.menuActionMenu.setStatusTip("Add menu")
+        self.menuActionMenu.triggered.connect(self.frmMenu.new_submenu)
         
         # New Item
         self.menuActionItem = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-new.png"), "Item", self)

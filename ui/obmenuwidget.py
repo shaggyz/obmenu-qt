@@ -295,6 +295,38 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         child.setSelected(True)
         self.set_changed()
 
+    def new_submenu(self):
+        """
+        Adds a new submenu
+        """
+        current_item = self.treeMenu.currentItem()
+        parent_id = self._get_parent_id(current_item)
+        index = self.treeMenu.currentIndex().row() + 1
+        parent = current_item.parent()
+
+        id = "new-submenu"
+        label = "New Submenu"
+
+        default_node = self.ob_menu.add_submenu(id, label, parent_id, index)
+
+        # new node for tree-view
+        child = QtGui.QTreeWidgetItem()
+        child.setText(0, label)
+        child.setText(1, "menu")
+        child.setText(4, id)
+
+        default_item = QtGui.QTreeWidgetItem()
+        default_item.setText(0, "New item")
+        default_item.setText(1, "item")
+        default_item.setText(2, "Execute")
+        default_item.setText(3, "command")
+
+        child.insertChild(0, default_item)
+        parent.insertChild(index, child)
+
+        child.setSelected(True)
+        self.set_changed()
+
     def remove_item(self):
         """
         Remove current item (only on dom memory)
