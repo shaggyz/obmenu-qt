@@ -190,6 +190,16 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             
         self.changed = status
 
+    def _get_parent_id(self, item):
+        """
+        Returns the parent item id
+        """
+        parent = item.parent()
+        if parent:
+            parent_id = parent.text(4)
+        else:
+            parent_id = "root-menu"
+        return parent_id
 
     def update_selected_item(self):
         """
@@ -199,13 +209,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         if current_item:
 
-            parent = current_item.parent()
-            if parent:
-                parent_id = parent.text(4)
-            else:
-                parent_id = None
-
-            nodeIndex = self.treeMenu.currentIndex()
+            parent_id = self._get_parent_id(current_item)
             index = self.treeMenu.currentIndex().row()
 
             (id, label, action, execute_, item_type) = self.read_item_fields()
@@ -227,7 +231,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
             self.set_changed()
 
-
     def read_item_fields(self):
         """
         Returns a tuple with the item fields from edit widgets
@@ -243,43 +246,35 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         return (id, label, action, exe, item_type)
 
-
     def new_item(self):
         """
         Adds a new item to dom object
         """
-        current_item = self.treeMenu.current_item()
+        current_item = self.treeMenu.currentItem()
+        parent_id = self._get_parent_id(current_item)
+        index = self.treeMenu.currentIndex().row() + 1
+        parent = current_item.parent()
 
-        # label = "New Item"
-        # action = "Execute"
-        # exe = "command"
+        label = "New item"
+        action = "command"
+        execute_ = "Execute"
 
-        # if len(current_item.text(4)) < 1:
-        #     menu = "root-menu"
-        #     parent = self.root_tree
-        # else: 
-        #     parent = current_item
-        #     current_item.text(4)
+        self.ob_menu.add_item(label, action, execute_, parent_id, index)
 
-        # position = self.treeMenu.currentIndex().row()
+        # new node for tree-view
+        child = QtGui.QTreeWidgetItem()
+        child.setText(0, label)
+        child.setText(1, "item")
+        child.setText(2, action)
+        child.setText(3, execute_)
+        parent.insertChild(index, child)
 
-        # # writes changes on memory
-        # self.ob_menu.createItem(menu, label, action, exe, position)
-
-        # # new node for tree-view
-        # child = QtGui.QTreeWidgetItem()
-        # child.setText(0, label)
-        # child.setText(1, "item")
-        # child.setText(2, action)
-        # child.setText(3, exe)
-        # parent.insertChild(position, child)
-
-        # # ui update
-        # self.treeMenu.scrollToItem(child)
-        # self.treeMenu.setcurrent_item(child)
-        # child.setSelected(True)
-        # self.load_item(child)
-        # self.set_changed()
+        # ui update
+        self.treeMenu.scrollToItem(child)
+        self.treeMenu.setCurrentItem(child)
+        child.setSelected(True)
+        self.load_item(child)
+        self.set_changed()
 
 
     def remove_item(self):
