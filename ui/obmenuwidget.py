@@ -281,23 +281,22 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         Remove current item (only on dom memory)
         """
-        # current_item = self.treeMenu.current_item()
-        # position = self.treeMenu.currentIndex().row()
-        
-        # if len(current_item.text(4)) < 1:
-        #     menu = "root-menu"
-        #     parent = self.root_tree
-        # else: 
-        #     parent = current_item
-        #     current_item.text(4)
+        current_item = self.treeMenu.currentItem()
+        item_type = current_item.text(1)
+        index = self.treeMenu.currentIndex().row()
+        parent_id = self._get_parent_id(current_item)        
 
-        # print "Item on position %s from menu-id %s will be removed" % (position, menu)
-        # self.ob_menu.remove_item(menu, position)
+        self.ob_menu.remove_item(item_type, index, parent_id)
 
-        # parent.removeChild(current_item)
+        if self.ob_menu.remove_item(item_type, index, parent_id):
+            self.parent().statusBar().showMessage("Item removed", 3000)
+        else:
+            self.parent().statusBar().showMessage("Error during item elimination", 3000)
 
-        # self.set_changed()
+        parent = current_item.parent()
+        parent.removeChild(current_item)
 
+        self.set_changed()
 
     def save_changes(self):
         """

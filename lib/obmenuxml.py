@@ -105,8 +105,9 @@ class ObMenuXml(object):
         Search and get a certain node from tree
         """
         submenu = self._get_submenu(parent_id)
-
-        for element in submenu.iter("{http://openbox.org/}" + type_):
+        # item type iteration filter produces segmention fault on python 2.7.x
+        # for element in submenu.iter("{http://openbox.org/}" + type_):
+        for element in submenu.iter():
             element_index = element.getparent().index(element)
             if element_index == index:
                 return element
