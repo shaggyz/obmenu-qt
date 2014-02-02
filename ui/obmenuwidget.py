@@ -40,11 +40,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.treeMenu.setAlternatingRowColors(True)
         self.treeMenu.setColumnWidth(0, 150)
 
-        self.filePath = self.get_base_menu_file()
+        self.file_path = self.get_base_menu_file()
 
-        if self.filePath:
+        if self.file_path:
 
-            self.ob_menu = ObMenuXml(self.filePath)
+            self.ob_menu = ObMenuXml(self.file_path)
             
             if not self.ob_menu.load_xml():
                 # TODO: QMessageBox here
@@ -92,18 +92,19 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 # type
                 child.setText(1, item_type)
 
-                # label
+                # id
                 if "id" in element.keys():
                     child.setText(4, element.get("id"))
 
                 if item_type == "menu":
-                    # menu elements use id as label
-                    child.setText(0, element.get("id"))
-                    # TODO: iterate submenu elements
+                    # if a menu does not have label 
+                    # the id attribute is used instead
+                    if "label" not in element.keys():
+                        label = element.get("id")
+                        child.setText(0, label)
                     if len(element):
                         self.load_menu(element, child)
                 if item_type == "item":
-                    
                     # we need to find actions
                     if len(element):
                         action = element[0]
@@ -134,12 +135,12 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
     def connect_signals(self):
         """
-        Connect internal widget signals
+        Connects internal widget signals
         """
         self.treeMenu.itemPressed.connect(self.load_item)
         self.txtLabel.textEdited.connect(self.update_selected_item)
         self.txtID.textEdited.connect(self.update_selected_item)
-        self.cmbAction.currentIndexChanged.connect(self.update_selected_item)
+        self.cmbAction.activated.connect(self.update_selected_item)
         self.txtExecute.textEdited.connect(self.update_selected_item)
 
 
@@ -197,24 +198,32 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         current_item = self.treeMenu.currentItem()
 
         if current_item:
+
+            parent = current_item.parent()
+            if parent:
+                parent_id = parent.text(4)
+            else:
+                parent_id = None
+
             nodeIndex = self.treeMenu.currentIndex()
             index = self.treeMenu.currentIndex().row()
 
-            (id, label, action, exe, item_type) = self.read_item_fields()
+            (id, label, action, execute_, item_type) = self.read_item_fields()
+
+            if id and len(id):
+                id = unicode(id)
 
             if item_type == "item":
-                self.ob_menu.setItemProps(id, index, label, action, exe)
+                self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_), icon=None, new_id=id)
             elif item_type == "menu":
-                # TODO: obxml fails on setMenuExecute and the 
-                #       original prog seems to not be capable 
-                #       to edit menu type items
-                #self.ob_menu.setMenuExecute(id, index, exe)
-                print "bypass menu-type item edition"
-                return
+                self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id)
             
             current_item.setText(0, label)
             current_item.setText(2, action)
-            current_item.setText(3, exe)
+            current_item.setText(3, execute_)
+
+            if id:
+                current_item.setText(4, id)
 
             self.set_changed()
 
@@ -225,7 +234,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         current_item = self.treeMenu.currentItem()
 
-        id = "root-menu" if len(self.txtID.text()) < 1 else self.txtID.text()
+        id = None if len(self.txtID.text()) < 1 else self.txtID.text()
 
         label = self.txtLabel.text()
         action = self.cmbAction.currentText()
@@ -241,58 +250,58 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         current_item = self.treeMenu.current_item()
 
-        label = "New Item"
-        action = "Execute"
-        exe = "command"
+        # label = "New Item"
+        # action = "Execute"
+        # exe = "command"
 
-        if len(current_item.text(4)) < 1:
-            menu = "root-menu"
-            parent = self.root_tree
-        else: 
-            parent = current_item
-            current_item.text(4)
+        # if len(current_item.text(4)) < 1:
+        #     menu = "root-menu"
+        #     parent = self.root_tree
+        # else: 
+        #     parent = current_item
+        #     current_item.text(4)
 
-        position = self.treeMenu.currentIndex().row()
+        # position = self.treeMenu.currentIndex().row()
 
-        # writes changes on memory
-        self.ob_menu.createItem(menu, label, action, exe, position)
+        # # writes changes on memory
+        # self.ob_menu.createItem(menu, label, action, exe, position)
 
-        # new node for tree-view
-        child = QtGui.QTreeWidgetItem()
-        child.setText(0, label)
-        child.setText(1, "item")
-        child.setText(2, action)
-        child.setText(3, exe)
-        parent.insertChild(position, child)
+        # # new node for tree-view
+        # child = QtGui.QTreeWidgetItem()
+        # child.setText(0, label)
+        # child.setText(1, "item")
+        # child.setText(2, action)
+        # child.setText(3, exe)
+        # parent.insertChild(position, child)
 
-        # ui update
-        self.treeMenu.scrollToItem(child)
-        self.treeMenu.setcurrent_item(child)
-        child.setSelected(True)
-        self.load_item(child)
-        self.set_changed()
+        # # ui update
+        # self.treeMenu.scrollToItem(child)
+        # self.treeMenu.setcurrent_item(child)
+        # child.setSelected(True)
+        # self.load_item(child)
+        # self.set_changed()
 
 
     def remove_item(self):
         """
         Remove current item (only on dom memory)
         """
-        current_item = self.treeMenu.current_item()
-        position = self.treeMenu.currentIndex().row()
+        # current_item = self.treeMenu.current_item()
+        # position = self.treeMenu.currentIndex().row()
         
-        if len(current_item.text(4)) < 1:
-            menu = "root-menu"
-            parent = self.root_tree
-        else: 
-            parent = current_item
-            current_item.text(4)
+        # if len(current_item.text(4)) < 1:
+        #     menu = "root-menu"
+        #     parent = self.root_tree
+        # else: 
+        #     parent = current_item
+        #     current_item.text(4)
 
-        print "Item on position %s from menu-id %s will be removed" % (position, menu)
-        self.ob_menu.remove_item(menu, position)
+        # print "Item on position %s from menu-id %s will be removed" % (position, menu)
+        # self.ob_menu.remove_item(menu, position)
 
-        parent.removeChild(current_item)
+        # parent.removeChild(current_item)
 
-        self.set_changed()
+        # self.set_changed()
 
 
     def save_changes(self):
@@ -300,10 +309,12 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Slot: Saves changes (stored on dom object)
         """
         if self.changed:
-            self.ob_menu.saveMenu(self.filePath)
-            self.reconfigure_openbox()
-            self.set_changed(False)
-            self.parent().statusBar().showMessage("Changes saved", 3000)
+            if self.ob_menu.save_menu():
+                self.reconfigure_openbox()
+                self.set_changed(False)
+                self.parent().statusBar().showMessage("Changes saved", 3000)
+            else:
+                self.parent().statusBar().showMessage("Error saving changes", 3000)    
         else: 
             self.parent().statusBar().showMessage("No chanches detected", 3000)
 

@@ -86,7 +86,7 @@ class ObMenuXml(object):
                 item.set("label", label)
             if icon is not None:
                 item.set("label", icon)
-            if new_id is not None:
+            if new_id is not None and len(new_id):
                 item.set("id", new_id)
             if "item" == type_:
                 if action is not None:
