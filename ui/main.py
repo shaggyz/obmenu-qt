@@ -133,6 +133,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionSeparator.setIconText("New separator")
         self.menuActionSeparator.setIconVisibleInMenu(False)
         self.menuActionSeparator.setStatusTip("Add separator")
+        self.menuActionSeparator.triggered.connect(self.frmMenu.new_separator)
 
         # New Link
         self.menuActionLink = QtGui.QAction("Link", self)

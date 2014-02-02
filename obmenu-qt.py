@@ -23,7 +23,7 @@ class ObMenuQt(object):
         
         # arguments
         # parser.add_argument("-i", "--ip", help="Listen on this ip")
-        # parser.add_argument("-p", "--port", help="Listen on this port")
+        # parser.add_argument("-p", "-child.setSelected(True)-port", help="Listen on this port")
         # parser.add_argument("-d", "--debug", help="Sets debug mode on", action="store_true")
         
         # arguments = parser.parse_args()

@@ -276,6 +276,24 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.load_item(child)
         self.set_changed()
 
+    def new_separator(self):
+        """
+        Adds a new item separator 
+        """
+        current_item = self.treeMenu.currentItem()
+        parent_id = self._get_parent_id(current_item)
+        index = self.treeMenu.currentIndex().row() + 1
+        parent = current_item.parent()
+
+        self.ob_menu.add_separator(parent_id, index)
+
+        # new node for tree-view
+        child = QtGui.QTreeWidgetItem()
+        child.setText(1, "separator")
+        parent.insertChild(index, child)
+
+        child.setSelected(True)
+        self.set_changed()
 
     def remove_item(self):
         """
