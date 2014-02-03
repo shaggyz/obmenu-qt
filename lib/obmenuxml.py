@@ -224,21 +224,3 @@ class ObMenuXml(object):
         else:
             return False
 
-
-
-"""
-Static application entry poiny
-"""
-if __name__ == "__main__":
-    app = ObMenuXml("/home/shaggyz/.config/openbox/menu.xml")
-    app.load_xml()
-
-    i = app._get_item("separator", 0, "root-menu")
-    print i
-
-    p = i.getparent()
-    print p
-
-    p.remove(i)
-
-    app.save_menu()

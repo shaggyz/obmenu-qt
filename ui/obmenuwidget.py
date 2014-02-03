@@ -196,7 +196,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         if current_index > 0:
             self.parent().menuActionMoveUp.setDisabled(False)            
-        if current_index < (item.parent().childCount()-1):
+
+        if item.parent() and current_index < (item.parent().childCount()-1):
             self.parent().menuActionMoveDown.setDisabled(False)            
 
 
