@@ -104,11 +104,13 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionMoveUp = QtGui.QAction(QtGui.QIcon(self.iconPath + "go-up.png"), "Move up", self)
         self.menuActionMoveUp.setShortcut("Ctrl+Up")
         self.menuActionMoveUp.setStatusTip("Move item up")
+        self.menuActionMoveUp.triggered.connect(self.frmMenu.move_item_up)
 
         # Move down
         self.menuActionMoveDown = QtGui.QAction(QtGui.QIcon(self.iconPath + "go-down.png"), "Move down", self)
         self.menuActionMoveDown.setShortcut("Ctrl+Down")
         self.menuActionMoveDown.setStatusTip("Move item down")
+        self.menuActionMoveDown.triggered.connect(self.frmMenu.move_item_down)
 
         # Delete
         self.menuActionDelete = QtGui.QAction(QtGui.QIcon(self.iconPath + "edit-delete.png"), "Delete", self)

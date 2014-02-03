@@ -354,6 +354,43 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         self.set_changed()
 
+    def move_item_up(self):
+        """
+        Slot: moves current item up
+        """
+        self._move_item("up")
+
+    def move_item_down(self):
+        """
+        Slot: moves current item down
+        """
+        self._move_item("down")
+
+    def _move_item(self, direction):
+        """
+        Moves an item position up or down
+        """
+        item = self.treeMenu.currentItem()
+        index = self.treeMenu.currentIndex().row()
+        item_type = item.text(1)
+        parent_id = self._get_parent_id(item)        
+
+        if direction == "up":
+            if index > 0:
+                new_index = index - 1  
+            else:
+                print "Item on bounds: UP"
+                return
+        else:
+            new_index = index + 1
+            if new_index >= item.parent().childCount():
+                print "Item on bounds: DOWN"
+                return
+        
+        self.ob_menu.move_item(item_type, index, new_index, parent_id, parent_id)
+        self.set_changed()
+
+
     def save_changes(self):
         """
         Slot: Saves changes (stored on dom object)
