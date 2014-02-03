@@ -283,10 +283,14 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         current_item = self.treeMenu.currentItem()
         parent_id = self._get_parent_id(current_item)
-        index = self.treeMenu.currentIndex().row()
+        index = self.treeMenu.currentIndex().row() + 1
         parent = current_item.parent()
 
-        print "Agregando separador en pos: %s" % (index)
+        # Menu bounds: no items 
+        # allowed over root-menu level
+        if parent is None:
+            parent = current_item
+
         self.ob_menu.add_separator(parent_id, index)
 
         # new node for tree-view
@@ -327,7 +331,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         child.insertChild(0, default_item)
         parent.insertChild(index, child)
 
-        child.setSelected(True)
+        self.treeMenu.setCurrentItem(default_item)
+        self.load_item(default_item)
         self.set_changed()
 
     def remove_item(self):
