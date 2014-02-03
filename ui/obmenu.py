@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'obmenu.ui'
 #
-# Created: Tue Jan 28 15:01:34 2014
+# Created: Mon Feb  3 17:30:57 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,12 +26,14 @@ except AttributeError:
 class Ui_frmObmenu(object):
     def setupUi(self, frmObmenu):
         frmObmenu.setObjectName(_fromUtf8("frmObmenu"))
-        frmObmenu.resize(400, 300)
+        frmObmenu.resize(640, 480)
         self.verticalLayout_2 = QtGui.QVBoxLayout(frmObmenu)
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.treeMenu = QtGui.QTreeWidget(frmObmenu)
+        self.treeMenu.setUniformRowHeights(True)
+        self.treeMenu.setAnimated(True)
         self.treeMenu.setObjectName(_fromUtf8("treeMenu"))
         self.treeMenu.headerItem().setText(0, _fromUtf8("1"))
         self.verticalLayout.addWidget(self.treeMenu)
@@ -100,7 +102,7 @@ class Ui_frmObmenu(object):
         QtCore.QMetaObject.connectSlotsByName(frmObmenu)
 
     def retranslateUi(self, frmObmenu):
-        frmObmenu.setWindowTitle(_translate("frmObmenu", "Form", None))
+        frmObmenu.setWindowTitle(_translate("frmObmenu", "Openbox menu editor", None))
         self.lblLabel.setText(_translate("frmObmenu", "Label", None))
         self.lblId.setText(_translate("frmObmenu", "ID", None))
         self.lblAction.setText(_translate("frmObmenu", "Action", None))

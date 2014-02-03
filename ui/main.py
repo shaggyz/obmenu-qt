@@ -28,6 +28,8 @@ class UiMainWindow(QtGui.QMainWindow):
             self.initToolbar()
 
         self.statusBar().showMessage("Ready")
+
+        self.setMinimumSize(640, 480)
         
 
     def initMenu(self):

@@ -32,6 +32,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.txtExecute.setDisabled(True)
         self.cmbAction.setDisabled(True)
 
+        # tree columns
+        self.treeMenu.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         self.changed = False
 
 
@@ -80,6 +82,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Iterates over all the menu nodes recursively 
         and creates the items for QTreeWidget
         """
+        icon_path = os.getcwd() + "/icons/"
+
         if parent is None:
             parent = self.root_tree
 
@@ -103,6 +107,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     child.setText(4, element.get("id"))
 
                 if item_type == "menu":
+                    # icon
+                    if "icon" in element.keys():
+                        child.setIcon(0, QtGui.QIcon(element.get("icon")))
+                    else:
+                        child.setIcon(0, QtGui.QIcon(icon_path + "document-open-folder.png"))
                     # if a menu does not have label 
                     # the id attribute is used instead
                     if "label" not in element.keys():
@@ -111,6 +120,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     if len(element):
                         self.load_menu(element, child)
                 if item_type == "item":
+                    #icon
+                    if "icon" in element.keys():
+                        child.setIcon(0, QtGui.QIcon(element.get("icon")))
+                    else: 
+                        child.setIcon(0, QtGui.QIcon(icon_path + "application-x-desktop.png"))
                     # we need to find actions
                     if len(element):
                         action = element[0]
@@ -122,6 +136,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                                 # execute
                                 if self.ob_menu.get_item_tag(item) == "execute":
                                     child.setText(3, item.text)
+                if item_type == "separator":
+                    child.setIcon(0, QtGui.QIcon(icon_path + "separator.png"))
+                    child.setText(2, "---")
+                    child.setText(3, "---")
+                    child.setText(4, "---")
 
     def get_base_menu_file(self):
         """
