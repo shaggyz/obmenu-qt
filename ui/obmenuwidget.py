@@ -256,8 +256,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         parent = current_item.parent()
 
         label = "New item"
-        action = "command"
-        execute_ = "Execute"
+        action = "Execute"
+        execute_ = "command"
 
         self.ob_menu.add_item(label, action, execute_, parent_id, index)
 
@@ -282,7 +282,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         current_item = self.treeMenu.currentItem()
         parent_id = self._get_parent_id(current_item)
-        index = self.treeMenu.currentIndex().row() + 1
+        index = self.treeMenu.currentIndex().row()
         parent = current_item.parent()
 
         self.ob_menu.add_separator(parent_id, index)
