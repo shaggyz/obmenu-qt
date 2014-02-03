@@ -25,6 +25,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         actions.append("Restart")
         actions.append("Exit")
         self.cmbAction.addItems(actions)
+        
+        # all controls disabled
+        self.txtLabel.setDisabled(True)
+        self.txtID.setDisabled(True)
+        self.txtExecute.setDisabled(True)
         self.cmbAction.setDisabled(True)
 
         self.changed = False
@@ -150,19 +155,49 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Item pressed slot (loads an item on controls for edition)
         """
         self.txtLabel.setText(item.text(0))
-        self.txtID.setText(item.text(4))
         item_type = item.text(1)
-        
         selIndex = self.cmbAction.findText(item.text(2))
+        self.txtExecute.setText(item.text(3))
+        self.txtID.setText(item.text(4))
+        
         self.cmbAction.setDisabled(selIndex == -1)
         self.cmbAction.setCurrentIndex(selIndex)
 
-        controls_disabled = item_type == "separator"
-        self.txtLabel.setDisabled(controls_disabled)
-        self.txtID.setDisabled(controls_disabled)
-        self.txtExecute.setDisabled(controls_disabled)
+        self.parent().menuActionMoveUp.setDisabled(True)            
+        self.parent().menuActionMoveDown.setDisabled(True)            
 
-        self.txtExecute.setText(item.text(3))
+        # widget status in function of 
+        # selected item type
+        if item_type == "separator":
+
+            self.txtLabel.setDisabled(True)
+            self.txtID.setDisabled(True)
+            self.txtExecute.setDisabled(True)
+            self.cmbAction.setDisabled(True)
+
+        elif item_type == "menu":
+
+            self.txtLabel.setDisabled(False)
+            self.txtID.setDisabled(False)
+            self.txtExecute.setDisabled(True)
+            self.cmbAction.setDisabled(True)
+
+        elif item_type == "item":
+
+            self.txtLabel.setDisabled(False)
+            self.txtID.setDisabled(False)
+            self.txtExecute.setDisabled(False)
+            self.cmbAction.setDisabled(False)
+
+        self.parent().menuActionDelete.setDisabled(False)
+
+        # Move buttons
+        current_index = self.treeMenu.currentIndex().row()
+
+        if current_index > 0:
+            self.parent().menuActionMoveUp.setDisabled(False)            
+        if current_index < (item.parent().childCount()-1):
+            self.parent().menuActionMoveDown.setDisabled(False)            
 
 
     def reconfigure_openbox(self):
@@ -184,10 +219,12 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         title = str(self.parent().windowTitle())
         
         if status and self.changed is False:
+            self.parent().menuActionSave.setDisabled(False)
             self.parent().setWindowTitle(title + " *")
         elif status is False and self.changed is True:        
             newTitle = title[0:-2]
             self.parent().setWindowTitle(newTitle)
+            self.parent().menuActionSave.setDisabled(True)
             
         self.changed = status
 
@@ -375,19 +412,29 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         item_type = item.text(1)
         parent_id = self._get_parent_id(item)        
 
+        parent = item.parent()
+        clone = parent.takeChild(index)
+
         if direction == "up":
             if index > 0:
                 new_index = index - 1  
             else:
-                print "Item on bounds: UP"
+                self.parent().statusBar().showMessage("Item top limit", 3000)
                 return
         else:
             new_index = index + 1
-            if new_index >= item.parent().childCount():
-                print "Item on bounds: DOWN"
+            if new_index >= parent.childCount():
+                self.parent().statusBar().showMessage("Item bottom limit", 3000)
                 return
-        
+
+        parent.setExpanded(True)
+        clone.setExpanded(True)
+
+        parent.insertChild(new_index, clone)
         self.ob_menu.move_item(item_type, index, new_index, parent_id, parent_id)
+        self.treeMenu.setCurrentItem(clone)
+        self.load_item(clone)
+
         self.set_changed()
 
 

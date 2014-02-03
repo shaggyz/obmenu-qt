@@ -86,6 +86,7 @@ class UiMainWindow(QtGui.QMainWindow):
         # Save
         self.menuActionSave = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save.png"), "Save", self)
         self.menuActionSave.setShortcut("Ctrl+S")
+        self.menuActionSave.setDisabled(True)
         self.menuActionSave.setStatusTip("Save current menu")
         self.menuActionSave.triggered.connect(self.frmMenu.save_changes)
 
@@ -102,18 +103,21 @@ class UiMainWindow(QtGui.QMainWindow):
 
         # Move up
         self.menuActionMoveUp = QtGui.QAction(QtGui.QIcon(self.iconPath + "go-up.png"), "Move up", self)
+        self.menuActionMoveUp.setDisabled(True)
         self.menuActionMoveUp.setShortcut("Ctrl+Up")
         self.menuActionMoveUp.setStatusTip("Move item up")
         self.menuActionMoveUp.triggered.connect(self.frmMenu.move_item_up)
 
         # Move down
         self.menuActionMoveDown = QtGui.QAction(QtGui.QIcon(self.iconPath + "go-down.png"), "Move down", self)
+        self.menuActionMoveDown.setDisabled(True)
         self.menuActionMoveDown.setShortcut("Ctrl+Down")
         self.menuActionMoveDown.setStatusTip("Move item down")
         self.menuActionMoveDown.triggered.connect(self.frmMenu.move_item_down)
 
         # Delete
         self.menuActionDelete = QtGui.QAction(QtGui.QIcon(self.iconPath + "edit-delete.png"), "Delete", self)
+        self.menuActionDelete.setDisabled(True)
         self.menuActionDelete.setStatusTip("Delete selected item")    
         self.menuActionDelete.triggered.connect(self.frmMenu.remove_item)
 
@@ -140,10 +144,12 @@ class UiMainWindow(QtGui.QMainWindow):
 
         # New Link
         self.menuActionLink = QtGui.QAction("Link", self)
+        self.menuActionLink.setDisabled(True)
         self.menuActionLink.setStatusTip("Add link")
 
         # New Pipemenu
         self.menuActionPipe = QtGui.QAction("Pipemenu", self)
+        self.menuActionPipe.setDisabled(True)
         self.menuActionPipe.setStatusTip("Add pipemenu")
 
         # About
