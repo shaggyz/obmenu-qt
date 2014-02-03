@@ -121,8 +121,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         Gets the main openbox menu file
         """
-        # menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
-        menu_path = os.getenv("HOME") + "/menu.xml"
+        menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
+        # menu_path = os.getenv("HOME") + "/menu.xml"
 
         if not os.path.isfile(menu_path):
             QtGui.QMessageBox.warning(self, 
