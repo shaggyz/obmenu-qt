@@ -106,10 +106,9 @@ class ObMenuXml(object):
         """
         submenu = self._get_submenu(parent_id)
         # item type iteration filter produces segmention fault on python 2.7.x
-        # for element in submenu.iter("{http://openbox.org/}" + type_):
         for element in submenu.iter():
             element_index = element.getparent().index(element)
-            if element_index == index:
+            if element_index == index and self.get_item_tag(element) == type_:
                 return element
 
     def _get_submenu(self, id, parent=None):
@@ -216,8 +215,8 @@ class ObMenuXml(object):
         """
         Removes an item from menu
         """
-        parent = self._get_submenu(parent_id)
         item = self._get_item(type_, index, parent_id)
+        parent = item.getparent()
 
         if isinstance(item, etree._Element):
             parent.remove(item)
@@ -226,3 +225,20 @@ class ObMenuXml(object):
             return False
 
 
+
+"""
+Static application entry poiny
+"""
+if __name__ == "__main__":
+    app = ObMenuXml("/home/shaggyz/.config/openbox/menu.xml")
+    app.load_xml()
+
+    i = app._get_item("separator", 0, "root-menu")
+    print i
+
+    p = i.getparent()
+    print p
+
+    p.remove(i)
+
+    app.save_menu()

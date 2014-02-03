@@ -339,8 +339,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         index = self.treeMenu.currentIndex().row()
         parent_id = self._get_parent_id(current_item)        
 
-        self.ob_menu.remove_item(item_type, index, parent_id)
-
         if self.ob_menu.remove_item(item_type, index, parent_id):
             self.parent().statusBar().showMessage("Item removed", 3000)
         else:
