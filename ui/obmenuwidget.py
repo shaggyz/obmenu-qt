@@ -34,6 +34,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         Configures the tree initial state
         """
+        self.treeMenu.clear()
         self.treeMenu.setColumnCount(5)
         self.treeMenu.setHeaderLabels(["Label", "Type", "Action", "Execute", "ID"])
         self.treeMenu.setSortingEnabled(False)
@@ -285,6 +286,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         index = self.treeMenu.currentIndex().row()
         parent = current_item.parent()
 
+        print "Agregando separador en pos: %s" % (index)
         self.ob_menu.add_separator(parent_id, index)
 
         # new node for tree-view
@@ -292,6 +294,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         child.setText(1, "separator")
         parent.insertChild(index, child)
 
+        current_item.setSelected(False)
         child.setSelected(True)
         self.set_changed()
 
@@ -357,6 +360,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 self.reconfigure_openbox()
                 self.set_changed(False)
                 self.parent().statusBar().showMessage("Changes saved", 3000)
+                self.init_tree()
             else:
                 self.parent().statusBar().showMessage("Error saving changes", 3000)    
         else: 

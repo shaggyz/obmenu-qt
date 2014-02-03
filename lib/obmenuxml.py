@@ -177,8 +177,7 @@ class ObMenuXml(object):
         separator = etree.Element("separator")
         parent = self._get_submenu(parent_id)
 
-        # index must be incressed to be placed bottom
-        parent.insert(index + 1, separator)
+        parent.insert(index, separator)
 
 
     def _create_item(self, label, execute_, action):
