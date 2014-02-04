@@ -199,7 +199,7 @@ class ObMenuXml(object):
 
     def move_item(self, type_, orig_index, dest_index, dest_parent_id="root-menu", orig_parent_id="root-menu"):
         """
-        Moves an item position on menu
+        moves an item position on menu
         """
         item = self._get_item(type_, orig_index, orig_parent_id)
 

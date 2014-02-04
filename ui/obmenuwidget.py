@@ -14,7 +14,10 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Constructs the main window
         """
         super(QtGui.QWidget, self).__init__()
-        
+
+        # selected item reminder
+        self.last_selected = None
+
         self.setupUi(self)
         self.init_tree()
 
@@ -88,10 +91,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             parent = self.root_tree
 
         if len(menu):
+            index = 0
             for element in menu:
                 if self.ob_menu.is_comment(element):
                     continue
-                
+
                 child = QtGui.QTreeWidgetItem(parent)
                 item_type = self.ob_menu.get_item_tag(element)
 
@@ -106,13 +110,22 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 if "id" in element.keys():
                     child.setText(4, element.get("id"))
 
+                # previously selected
+                if self.last_selected is not None:
+                    last_index = self.last_selected["index"]
+                    last_parent_id = self.last_selected["parent_id"]
+
+                    if last_index == index and last_parent_id == parent.text(4):
+                        child.setSelected(True)
+                        self.treeMenu.setCurrentItem(child, 0)
+
                 if item_type == "menu":
                     # icon
                     if "icon" in element.keys():
                         child.setIcon(0, QtGui.QIcon(element.get("icon")))
                     else:
                         child.setIcon(0, QtGui.QIcon(icon_path + "document-open-folder.png"))
-                    # if a menu does not have label 
+                    # if a menu does not have label
                     # the id attribute is used instead
                     if "label" not in element.keys():
                         label = element.get("id")
@@ -123,7 +136,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     #icon
                     if "icon" in element.keys():
                         child.setIcon(0, QtGui.QIcon(element.get("icon")))
-                    else: 
+                    else:
                         child.setIcon(0, QtGui.QIcon(icon_path + "application-x-desktop.png"))
                     # we need to find actions
                     if len(element):
@@ -141,6 +154,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     child.setText(2, "---")
                     child.setText(3, "---")
                     child.setText(4, "---")
+
+                index += 1
 
     def get_base_menu_file(self):
         """
@@ -178,6 +193,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         selIndex = self.cmbAction.findText(item.text(2))
         self.txtExecute.setText(item.text(3))
         self.txtID.setText(item.text(4))
+
+        # Last selected reminder
+        self._update_last_selected()
         
         self.cmbAction.setDisabled(selIndex == -1)
         self.cmbAction.setCurrentIndex(selIndex)
@@ -424,10 +442,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         index = self.treeMenu.currentIndex().row()
         parent_id = self._get_parent_id(current_item)
 
-        print "Se pretende borrar el tag: %s pos: %s parent_id: %s" % (item_type, index, parent_id)
-
-        # return
-
         if self.ob_menu.remove_item(item_type, index, parent_id, item_id):
             self.parent().statusBar().showMessage("Item removed", 3000)
         else:
@@ -484,6 +498,21 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         self.set_changed()
 
+    def _update_last_selected(self):
+        """
+        Updates the last selected reminder
+        """
+        item = self.treeMenu.currentItem()
+        parent = item.parent()
+
+        # root node
+        if parent is None:
+            return
+
+        parent_id = parent.text(4)
+        index = self.treeMenu.currentIndex().row()
+
+        self.last_selected = {"index": index, "parent_id": parent_id}
 
     def save_changes(self):
         """
