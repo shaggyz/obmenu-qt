@@ -209,6 +209,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.cmbAction.setDisabled(False)
 
         self.parent().menuActionDelete.setDisabled(False)
+        self.parent().menuActionMenu.setDisabled(False)
+        self.parent().menuActionItem.setDisabled(False)
+        self.parent().menuActionSeparator.setDisabled(False)
 
         # Move buttons
         current_index = self.treeMenu.currentIndex().row()
@@ -309,9 +312,17 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Adds a new item to dom object
         """
         current_item = self.treeMenu.currentItem()
-        parent_id = self._get_parent_id(current_item)
-        index = self.treeMenu.currentIndex().row() + 1
         parent = current_item.parent()
+
+        # Menu bounds: no items 
+        # allowed over root-menu level
+        if parent is None:
+            parent = current_item
+            parent_id = "root-menu"
+            index = 0
+        else:
+            index = self.treeMenu.currentIndex().row() + 1
+            parent_id = self._get_parent_id(current_item)
 
         label = "New item"
         action = "Execute"
@@ -339,14 +350,17 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Adds a new item separator 
         """
         current_item = self.treeMenu.currentItem()
-        parent_id = self._get_parent_id(current_item)
-        index = self.treeMenu.currentIndex().row() + 1
         parent = current_item.parent()
 
         # Menu bounds: no items 
         # allowed over root-menu level
         if parent is None:
             parent = current_item
+            parent_id = "root-menu"
+            index = 0
+        else:
+            index = self.treeMenu.currentIndex().row() + 1
+            parent_id = self._get_parent_id(current_item)
 
         self.ob_menu.add_separator(parent_id, index)
 
@@ -364,9 +378,17 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Adds a new submenu
         """
         current_item = self.treeMenu.currentItem()
-        parent_id = self._get_parent_id(current_item)
-        index = self.treeMenu.currentIndex().row() + 1
         parent = current_item.parent()
+
+        # Menu bounds: no items 
+        # allowed over root-menu level
+        if parent is None:
+            parent = current_item
+            parent_id = "root-menu"
+            index = 0
+        else:
+            index = self.treeMenu.currentIndex().row() + 1
+            parent_id = self._get_parent_id(current_item)
 
         id = "new-submenu"
         label = "New Submenu"
@@ -400,6 +422,10 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         item_type = current_item.text(1)
         index = self.treeMenu.currentIndex().row()
         parent_id = self._get_parent_id(current_item)        
+
+        print "Se pretende borrar el tag: %s pos: %s parent_id: %s" % (item_type, index, parent_id)
+
+        # return
 
         if self.ob_menu.remove_item(item_type, index, parent_id):
             self.parent().statusBar().showMessage("Item removed", 3000)

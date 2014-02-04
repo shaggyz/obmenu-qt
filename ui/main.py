@@ -127,6 +127,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionMenu = QtGui.QAction(QtGui.QIcon(self.iconPath + "archive-insert-directory.png"), "Menu", self)
         self.menuActionMenu.setIconText("New menu")
         self.menuActionMenu.setIconVisibleInMenu(False)
+        self.menuActionMenu.setDisabled(True)
         self.menuActionMenu.setStatusTip("Add menu")
         self.menuActionMenu.triggered.connect(self.frmMenu.new_submenu)
         
@@ -134,6 +135,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionItem = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-new.png"), "Item", self)
         self.menuActionItem.setIconText("New item")
         self.menuActionItem.setIconVisibleInMenu(False)
+        self.menuActionItem.setDisabled(True)
         self.menuActionItem.setStatusTip("Add item")
         self.menuActionItem.triggered.connect(self.frmMenu.new_item)
         
@@ -141,6 +143,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionSeparator = QtGui.QAction(QtGui.QIcon(self.iconPath + "zoom-fit-width.png"), "Separator", self)
         self.menuActionSeparator.setIconText("New separator")
         self.menuActionSeparator.setIconVisibleInMenu(False)
+        self.menuActionSeparator.setDisabled(True)
         self.menuActionSeparator.setStatusTip("Add separator")
         self.menuActionSeparator.triggered.connect(self.frmMenu.new_separator)
 

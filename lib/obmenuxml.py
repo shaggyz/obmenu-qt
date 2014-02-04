@@ -224,3 +224,10 @@ class ObMenuXml(object):
         else:
             return False
 
+
+    def remove_submenu(self, id_, parent_id):
+        """
+        Removes a submenu node
+        """
+        pass
+        #menu = self._get_submenu()
