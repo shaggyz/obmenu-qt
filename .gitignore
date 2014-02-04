@@ -2,3 +2,4 @@
 .directory
 *.original
 .DS_*
+.idea
