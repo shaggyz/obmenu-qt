@@ -211,11 +211,15 @@ class ObMenuXml(object):
 
         dest_parent.insert(dest_index, clone)
 
-    def remove_item(self, type_, index, parent_id="root-menu"):
+    def remove_item(self, type_, index, parent_id="root-menu", id_=None):
         """
         Removes an item from menu
         """
-        item = self._get_item(type_, index, parent_id)
+        if type_ == "menu":
+            item = self._get_submenu(id_)
+        else:
+            item = self._get_item(type_, index, parent_id)
+
         parent = item.getparent()
 
         if isinstance(item, etree._Element):
@@ -223,11 +227,3 @@ class ObMenuXml(object):
             return True
         else:
             return False
-
-
-    def remove_submenu(self, id_, parent_id):
-        """
-        Removes a submenu node
-        """
-        pass
-        #menu = self._get_submenu()

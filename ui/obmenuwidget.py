@@ -420,14 +420,15 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         current_item = self.treeMenu.currentItem()
         item_type = current_item.text(1)
+        item_id = current_item.text(4)
         index = self.treeMenu.currentIndex().row()
-        parent_id = self._get_parent_id(current_item)        
+        parent_id = self._get_parent_id(current_item)
 
         print "Se pretende borrar el tag: %s pos: %s parent_id: %s" % (item_type, index, parent_id)
 
         # return
 
-        if self.ob_menu.remove_item(item_type, index, parent_id):
+        if self.ob_menu.remove_item(item_type, index, parent_id, item_id):
             self.parent().statusBar().showMessage("Item removed", 3000)
         else:
             self.parent().statusBar().showMessage("Error during item elimination", 3000)
