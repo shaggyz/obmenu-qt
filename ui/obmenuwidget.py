@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 from ui.obmenu import Ui_frmObmenu
 from lib.obmenuxml import ObMenuXml
 import os
@@ -23,11 +23,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Constructs the main window
         """
         super(QtGui.QWidget, self).__init__()
+        self.setupUi(self)
 
         # selected item reminder
         self.last_selected = None
 
-        self.setupUi(self)
         self.init_tree()
 
         # Combo options
@@ -47,9 +47,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.btnChangeIcon.setDisabled(True)
 
         # tree columns
-        self.treeMenu.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.treeMenu.header().setResizeMode(self.COL_LABEL, QtGui.QHeaderView.ResizeToContents)
         self.changed = False
 
+        # signal connections
+        self.connect_signals()
 
     def init_tree(self):
         """
@@ -60,7 +62,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.treeMenu.setHeaderLabels(["Label", "Type", "Action", "Execute", "ID", "Icon"])
         self.treeMenu.setSortingEnabled(False)
         self.treeMenu.setAlternatingRowColors(True)
-        self.treeMenu.setColumnWidth(0, 150)
+        self.treeMenu.setColumnWidth(self.COL_LABEL, 150)
 
         self.file_path = self.get_base_menu_file()
 
@@ -69,8 +71,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.ob_menu = ObMenuXml(self.file_path)
             
             if not self.ob_menu.load_xml():
-                # TODO: QMessageBox here
-                print "Error during xml load"
+                QtGui.QMessageBox.critical(self,
+                                          "Error on XML load",
+                                          "The application can't read the xml file, may be is corrupted")
                 return
             
             menu = self.ob_menu.get_menu()
@@ -84,10 +87,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             # children items
             self.load_menu(menu)
             self.root_tree.setExpanded(True)
-
-            # signal connections
-            self.connect_signals()
-
 
     def load_menu(self, menu, parent=None):
         """
@@ -195,8 +194,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.cmbAction.activated.connect(self.update_selected_item)
         self.txtExecute.textEdited.connect(self.update_selected_item)
         self.txtIcon.textEdited.connect(self.update_selected_item)
+        self.btnChangeIcon.clicked.connect(self.change_icon_path)
 
-    def load_item(self, item, column=0):
+    def load_item(self, item):
         """
         Item pressed slot (loads an item on controls for edition)
         """
@@ -319,7 +319,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             if item_type == "item":
                 self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_), unicode(icon), new_id=id)
             elif item_type == "menu":
-                self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id, icon=icon)
+                self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id, icon=unicode(icon))
             
             current_item.setText(self.COL_LABEL, label)
             current_item.setText(self.COL_ACTION, action)
@@ -518,6 +518,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         parent.setExpanded(True)
         clone.setExpanded(True)
 
+        """
+        TODO: if there is a menu-type item on destination
+        the moved item must be placed inside that item at index zero
+        """
+
         parent.insertChild(new_index, clone)
         self.ob_menu.move_item(item_type, index, new_index, parent_id, parent_id)
         self.treeMenu.setCurrentItem(clone)
@@ -540,6 +545,16 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         index = self.treeMenu.currentIndex().row()
 
         self.last_selected = {"index": index, "parent_id": parent_id}
+
+    def change_icon_path(self):
+        """
+        Slot: called when change
+        icon button is clicked
+        """
+        new_icon_path = QtGui.QFileDialog.getOpenFileName(self, "Select the new icon file", "/usr/share/icons", "Images (*.png *.xpm *.jpg)")
+        self.txtIcon.setText(new_icon_path)
+        self.update_selected_item()
+        self.set_changed()
 
     def save_changes(self):
         """
