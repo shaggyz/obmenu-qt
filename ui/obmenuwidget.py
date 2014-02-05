@@ -64,6 +64,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.treeMenu.setAlternatingRowColors(True)
         self.treeMenu.setColumnWidth(self.COL_LABEL, 150)
 
+        self.treeMenu.setColumnHidden(self.COL_ICON, True)
+
         self.file_path = self.get_base_menu_file()
 
         if self.file_path:
