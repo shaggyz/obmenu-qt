@@ -115,6 +115,7 @@ class ObMenuXml(object):
         """
         Returns a submenu from his id
         """
+
         if parent is None:
             parent = self.menu
 
@@ -151,7 +152,6 @@ class ObMenuXml(object):
         Adds a new item to menu
         """
         item = self._create_item(label, execute_, action)
-
         parent = self._get_submenu(parent_id)
         parent.insert(index, item)
 
@@ -159,15 +159,16 @@ class ObMenuXml(object):
         """
         Adds a new menu
         """
-        menu_item = etree.Element("menu")
+        menu_item = etree.Element("{http://openbox.org/}menu")
         menu_item.set("id", id)
         menu_item.set("label", label)
         # TODO: icon here
-        
-        menu_item.append(self._create_item("New item", "command", "Execute"))
 
         parent = self._get_submenu(parent_id)
         parent.insert(index, menu_item)
+
+        menu_item.append(self._create_item("New item", "command", "Execute"))
+
 
     def add_separator(self, parent_id="root-menu", index=0):
         """
@@ -183,7 +184,7 @@ class ObMenuXml(object):
         """
         Returns an item node with default values
         """
-        item = etree.Element("item")
+        item = etree.Element("{http://openbox.org/}item")
         item.set("label", label)
         # TODO: icon here
 

@@ -7,9 +7,17 @@ import os
 
 class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     """
-    QtCreator generated file overload
+    Main widget container designed to deal with
+    the obmenuxml module, QtCreator generated
+    file overload
     """
-    def __init__(self): 
+    COL_LABEL = 0
+    COL_TYPE = 1
+    COL_ACTION = 2
+    COL_EXECUTE = 3
+    COL_ID = 4
+
+    def __init__(self):
         """
         Constructs the main window
         """
@@ -63,17 +71,15 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 return
             
             menu = self.ob_menu.get_menu()
-            menu_id = menu.get("id")
 
             # tree root
             self.root_tree = QtGui.QTreeWidgetItem(self.treeMenu)
-            self.root_tree.setText(0, menu.get("label"))
-            self.root_tree.setText(1, self.ob_menu.get_item_tag(menu))
-            self.root_tree.setText(4, menu.get("id"))
+            self.root_tree.setText(self.COL_LABEL, menu.get("label"))
+            self.root_tree.setText(self.COL_TYPE, self.ob_menu.get_item_tag(menu))
+            self.root_tree.setText(self.COL_ID, menu.get("id"))
 
             # children items
             self.load_menu(menu)
-
             self.root_tree.setExpanded(True)
 
             # signal connections
@@ -101,59 +107,59 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
                 # label
                 if "label" in element.keys():
-                    child.setText(0, element.get("label"))
+                    child.setText(self.COL_LABEL, element.get("label"))
 
                 # type
-                child.setText(1, item_type)
+                child.setText(self.COL_TYPE, item_type)
 
                 # id
                 if "id" in element.keys():
-                    child.setText(4, element.get("id"))
+                    child.setText(self.COL_ID, element.get("id"))
 
                 # previously selected
                 if self.last_selected is not None:
                     last_index = self.last_selected["index"]
                     last_parent_id = self.last_selected["parent_id"]
 
-                    if last_index == index and last_parent_id == parent.text(4):
+                    if last_index == index and last_parent_id == parent.text(self.COL_ID):
                         child.setSelected(True)
                         self.treeMenu.setCurrentItem(child, 0)
 
                 if item_type == "menu":
                     # icon
                     if "icon" in element.keys():
-                        child.setIcon(0, QtGui.QIcon(element.get("icon")))
+                        child.setIcon(self.COL_LABEL, QtGui.QIcon(element.get("icon")))
                     else:
-                        child.setIcon(0, QtGui.QIcon(icon_path + "document-open-folder.png"))
+                        child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "document-open-folder.png"))
                     # if a menu does not have label
                     # the id attribute is used instead
                     if "label" not in element.keys():
                         label = element.get("id")
-                        child.setText(0, label)
+                        child.setText(self.COL_LABEL, label)
                     if len(element):
                         self.load_menu(element, child)
                 if item_type == "item":
                     #icon
                     if "icon" in element.keys():
-                        child.setIcon(0, QtGui.QIcon(element.get("icon")))
+                        child.setIcon(self.COL_LABEL, QtGui.QIcon(element.get("icon")))
                     else:
-                        child.setIcon(0, QtGui.QIcon(icon_path + "application-x-desktop.png"))
+                        child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "application-x-desktop.png"))
                     # we need to find actions
                     if len(element):
                         action = element[0]
-                        child.setText(2, action.get("name"))
+                        child.setText(self.COL_ACTION, action.get("name"))
 
                         # action childs
                         if len(action):
                             for item in action:
                                 # execute
                                 if self.ob_menu.get_item_tag(item) == "execute":
-                                    child.setText(3, item.text)
+                                    child.setText(self.COL_EXECUTE, item.text)
                 if item_type == "separator":
-                    child.setIcon(0, QtGui.QIcon(icon_path + "separator.png"))
-                    child.setText(2, "---")
-                    child.setText(3, "---")
-                    child.setText(4, "---")
+                    child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "separator.png"))
+                    child.setText(self.COL_ACTION, "---")
+                    child.setText(self.COL_EXECUTE, "---")
+                    child.setText(self.COL_ID, "---")
 
                 index += 1
 
@@ -162,7 +168,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Gets the main openbox menu file
         """
         menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
-        # menu_path = os.getenv("HOME") + "/menu.xml"
 
         if not os.path.isfile(menu_path):
             QtGui.QMessageBox.warning(self, 
@@ -188,11 +193,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         Item pressed slot (loads an item on controls for edition)
         """
-        self.txtLabel.setText(item.text(0))
-        item_type = item.text(1)
-        selIndex = self.cmbAction.findText(item.text(2))
-        self.txtExecute.setText(item.text(3))
-        self.txtID.setText(item.text(4))
+        self.txtLabel.setText(item.text(self.COL_LABEL))
+        item_type = item.text(self.COL_TYPE)
+        selIndex = self.cmbAction.findText(item.text(self.COL_ACTION))
+        self.txtExecute.setText(item.text(self.COL_EXECUTE))
+        self.txtID.setText(item.text(self.COL_ID))
 
         # Last selected reminder
         self._update_last_selected()
@@ -275,7 +280,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         parent = item.parent()
         if parent:
-            parent_id = parent.text(4)
+            parent_id = parent.text(self.COL_ID)
         else:
             parent_id = "root-menu"
         return parent_id
@@ -301,12 +306,12 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             elif item_type == "menu":
                 self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id)
             
-            current_item.setText(0, label)
-            current_item.setText(2, action)
-            current_item.setText(3, execute_)
+            current_item.setText(self.COL_LABEL, label)
+            current_item.setText(self.COL_ACTION, action)
+            current_item.setText(self.COL_EXECUTE, execute_)
 
             if id:
-                current_item.setText(4, id)
+                current_item.setText(self.COL_ID, id)
 
             self.set_changed()
 
@@ -321,7 +326,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         label = self.txtLabel.text()
         action = self.cmbAction.currentText()
         exe = self.txtExecute.text()
-        item_type = current_item.text(1)
+        item_type = current_item.text(self.COL_TYPE)
 
         return (id, label, action, exe, item_type)
 
@@ -332,13 +337,19 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         current_item = self.treeMenu.currentItem()
         parent = current_item.parent()
 
-        # Menu bounds: no items 
-        # allowed over root-menu level
         if parent is None:
+            # Menu bounds: no items
+            # allowed over root-menu level
             parent = current_item
             parent_id = "root-menu"
             index = 0
+        elif current_item.text(self.COL_TYPE) == "menu":
+            # Item on submenu
+            index = 0
+            parent = current_item
+            parent_id = current_item.text(self.COL_ID)
         else:
+            # Normal item insertion
             index = self.treeMenu.currentIndex().row() + 1
             parent_id = self._get_parent_id(current_item)
 
@@ -350,10 +361,10 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         # new node for tree-view
         child = QtGui.QTreeWidgetItem()
-        child.setText(0, label)
-        child.setText(1, "item")
-        child.setText(2, action)
-        child.setText(3, execute_)
+        child.setText(self.COL_LABEL, label)
+        child.setText(self.COL_TYPE, "item")
+        child.setText(self.COL_ACTION, action)
+        child.setText(self.COL_EXECUTE, execute_)
         parent.insertChild(index, child)
 
         # ui update
@@ -384,7 +395,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         # new node for tree-view
         child = QtGui.QTreeWidgetItem()
-        child.setText(1, "separator")
+        child.setText(self.COL_TYPE, "separator")
         parent.insertChild(index, child)
 
         current_item.setSelected(False)
@@ -411,19 +422,19 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         id = "new-submenu"
         label = "New Submenu"
 
-        default_node = self.ob_menu.add_submenu(id, label, parent_id, index)
+        self.ob_menu.add_submenu(id, label, parent_id, index)
 
         # new node for tree-view
         child = QtGui.QTreeWidgetItem()
-        child.setText(0, label)
-        child.setText(1, "menu")
-        child.setText(4, id)
+        child.setText(self.COL_LABEL, label)
+        child.setText(self.COL_TYPE, "menu")
+        child.setText(self.COL_ID, id)
 
         default_item = QtGui.QTreeWidgetItem()
-        default_item.setText(0, "New item")
-        default_item.setText(1, "item")
-        default_item.setText(2, "Execute")
-        default_item.setText(3, "command")
+        default_item.setText(self.COL_LABEL, "New item")
+        default_item.setText(self.COL_TYPE, "item")
+        default_item.setText(self.COL_ACTION, "Execute")
+        default_item.setText(self.COL_EXECUTE, "command")
 
         child.insertChild(0, default_item)
         parent.insertChild(index, child)
@@ -437,8 +448,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Remove current item (only on dom memory)
         """
         current_item = self.treeMenu.currentItem()
-        item_type = current_item.text(1)
-        item_id = current_item.text(4)
+        item_type = current_item.text(self.COL_TYPE)
+        item_id = current_item.text(self.COL_ID)
         index = self.treeMenu.currentIndex().row()
         parent_id = self._get_parent_id(current_item)
 
@@ -470,7 +481,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         item = self.treeMenu.currentItem()
         index = self.treeMenu.currentIndex().row()
-        item_type = item.text(1)
+        item_type = item.text(self.COL_TYPE)
         parent_id = self._get_parent_id(item)        
 
         parent = item.parent()
@@ -509,7 +520,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         if parent is None:
             return
 
-        parent_id = parent.text(4)
+        parent_id = parent.text(self.COL_ID)
         index = self.treeMenu.currentIndex().row()
 
         self.last_selected = {"index": index, "parent_id": parent_id}
