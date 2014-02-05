@@ -2,6 +2,7 @@
 
 from PyQt4 import QtGui, QtCore
 from ui.obmenuwidget import ObMenuWidget
+from ui.aboutwidget import ObAboutWidget
 import os
 
 class UiMainWindow(QtGui.QMainWindow):
@@ -22,7 +23,11 @@ class UiMainWindow(QtGui.QMainWindow):
         self.setWindowTitle("Openbox menu configuration")
         self.setWindowIcon(QtGui.QIcon(self.iconPath + "mnu48.png"))
 
+        # about widget
+        self.frmAbout = None
+
         if autoConfigure:
+            self._prepare_about_widget()
             self.initActions()
             self.initMenu()
             self.initToolbar()
@@ -159,8 +164,25 @@ class UiMainWindow(QtGui.QMainWindow):
 
         # About
         self.menuActionAbout = QtGui.QAction("About", self)
-        self.menuActionAbout.setStatusTip("About")      
+        self.menuActionAbout.setStatusTip("About")
+        self.menuActionAbout.triggered.connect(self.frmAbout.show)
 
+    def _prepare_about_widget(self):
+        """
+        Configures the default values for about widget
+        """
+        self.frmAbout = ObAboutWidget()
+        self.frmAbout.setupUi(QtGui.QWidget())
+
+        # TODO: center on parent here
+        self.frmAbout.move(self.frameGeometry().topLeft() + self.rect().center() - self.rect().center())
+
+    def closeEvent(self, event):
+        """
+        Close event slot
+        """
+        self.frmAbout.close()
+        event.accept()
 
     def initToolbar(self):
         """
@@ -168,8 +190,6 @@ class UiMainWindow(QtGui.QMainWindow):
         """
         toolbar = self.addToolBar('Exit')
         toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
-        # toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonFollowStyle)
-        # toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 
         toolbar.addAction(self.menuActionSave)
         toolbar.addSeparator()

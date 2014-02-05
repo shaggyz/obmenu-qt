@@ -3,6 +3,7 @@
 
 import sys, os, argparse
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtGui import QStyle
 from ui.main import UiMainWindow
 
 
@@ -42,10 +43,7 @@ class ObMenuQt(object):
         QTApp = QtGui.QApplication(sys.argv)
         
         mainWindow = UiMainWindow()
-
-        # just for dev. (forces stays on top)
-        mainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-
+        mainWindow.setGeometry(QStyle.alignedRect(QtCore.Qt.LeftToRight, QtCore.Qt.AlignCenter, mainWindow.size(), QTApp.desktop().availableGeometry()))
         mainWindow.show()
 
         sys.exit(QTApp.exec_())
