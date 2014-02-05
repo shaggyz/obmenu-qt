@@ -29,7 +29,7 @@ class UiMainWindow(QtGui.QMainWindow):
 
         self.statusBar().showMessage("Ready")
 
-        self.setMinimumSize(640, 480)
+        self.setMinimumSize(740, 580)
         
 
     def initMenu(self):

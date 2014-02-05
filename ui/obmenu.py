@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'obmenu.ui'
 #
-# Created: Wed Feb  5 13:45:51 2014
+# Created: Wed Feb  5 15:26:01 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -96,6 +96,18 @@ class Ui_frmObmenu(object):
         self.txtExecute.setObjectName(_fromUtf8("txtExecute"))
         self.horizontalLayout_4.addWidget(self.txtExecute)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
+        self.horizontalLayout_5 = QtGui.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
+        self.label = QtGui.QLabel(frmObmenu)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.horizontalLayout_5.addWidget(self.label)
+        self.txtIcon = QtGui.QLineEdit(frmObmenu)
+        self.txtIcon.setObjectName(_fromUtf8("txtIcon"))
+        self.horizontalLayout_5.addWidget(self.txtIcon)
+        self.btnChangeIcon = QtGui.QPushButton(frmObmenu)
+        self.btnChangeIcon.setObjectName(_fromUtf8("btnChangeIcon"))
+        self.horizontalLayout_5.addWidget(self.btnChangeIcon)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_5)
         self.verticalLayout_2.addLayout(self.verticalLayout_3)
 
         self.retranslateUi(frmObmenu)
@@ -107,4 +119,6 @@ class Ui_frmObmenu(object):
         self.lblId.setText(_translate("frmObmenu", "ID", None))
         self.lblAction.setText(_translate("frmObmenu", "Action", None))
         self.lblExecute.setText(_translate("frmObmenu", "Execute", None))
+        self.label.setText(_translate("frmObmenu", "Icon      ", None))
+        self.btnChangeIcon.setText(_translate("frmObmenu", "Change Icon", None))
 

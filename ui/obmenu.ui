@@ -138,6 +138,27 @@
        </item>
       </layout>
      </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Icon      </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="txtIcon"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnChangeIcon">
+         <property name="text">
+          <string>Change Icon</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
   </layout>

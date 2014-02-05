@@ -16,6 +16,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     COL_ACTION = 2
     COL_EXECUTE = 3
     COL_ID = 4
+    COL_ICON = 5
 
     def __init__(self):
         """
@@ -42,6 +43,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.txtID.setDisabled(True)
         self.txtExecute.setDisabled(True)
         self.cmbAction.setDisabled(True)
+        self.txtIcon.setDisabled(True)
+        self.btnChangeIcon.setDisabled(True)
 
         # tree columns
         self.treeMenu.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
@@ -53,8 +56,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Configures the tree initial state
         """
         self.treeMenu.clear()
-        self.treeMenu.setColumnCount(5)
-        self.treeMenu.setHeaderLabels(["Label", "Type", "Action", "Execute", "ID"])
+        self.treeMenu.setColumnCount(6)
+        self.treeMenu.setHeaderLabels(["Label", "Type", "Action", "Execute", "ID", "Icon"])
         self.treeMenu.setSortingEnabled(False)
         self.treeMenu.setAlternatingRowColors(True)
         self.treeMenu.setColumnWidth(0, 150)
@@ -116,6 +119,10 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 if "id" in element.keys():
                     child.setText(self.COL_ID, element.get("id"))
 
+                # icon path
+                if "icon" in element.keys():
+                    child.setText(self.COL_ICON, element.get("icon"))
+
                 # previously selected
                 if self.last_selected is not None:
                     last_index = self.last_selected["index"]
@@ -155,6 +162,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                                 # execute
                                 if self.ob_menu.get_item_tag(item) == "execute":
                                     child.setText(self.COL_EXECUTE, item.text)
+
                 if item_type == "separator":
                     child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "separator.png"))
                     child.setText(self.COL_ACTION, "---")
@@ -177,7 +185,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         return menu_path
 
-
     def connect_signals(self):
         """
         Connects internal widget signals
@@ -187,7 +194,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.txtID.textEdited.connect(self.update_selected_item)
         self.cmbAction.activated.connect(self.update_selected_item)
         self.txtExecute.textEdited.connect(self.update_selected_item)
-
+        self.txtIcon.textEdited.connect(self.update_selected_item)
 
     def load_item(self, item, column=0):
         """
@@ -198,6 +205,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         selIndex = self.cmbAction.findText(item.text(self.COL_ACTION))
         self.txtExecute.setText(item.text(self.COL_EXECUTE))
         self.txtID.setText(item.text(self.COL_ID))
+        self.txtIcon.setText(item.text(self.COL_ICON))
 
         # Last selected reminder
         self._update_last_selected()
@@ -216,6 +224,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.txtID.setDisabled(True)
             self.txtExecute.setDisabled(True)
             self.cmbAction.setDisabled(True)
+            self.txtIcon.setDisabled(True)
+            self.btnChangeIcon.setDisabled(True)
 
         elif item_type == "menu":
 
@@ -223,6 +233,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.txtID.setDisabled(False)
             self.txtExecute.setDisabled(True)
             self.cmbAction.setDisabled(True)
+            self.txtIcon.setDisabled(False)
+            self.btnChangeIcon.setDisabled(False)
 
         elif item_type == "item":
 
@@ -230,6 +242,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.txtID.setDisabled(False)
             self.txtExecute.setDisabled(False)
             self.cmbAction.setDisabled(False)
+            self.txtIcon.setDisabled(False)
+            self.btnChangeIcon.setDisabled(False)
 
         self.parent().menuActionDelete.setDisabled(False)
         self.parent().menuActionMenu.setDisabled(False)
@@ -239,6 +253,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         # Move buttons
         current_index = self.treeMenu.currentIndex().row()
 
+        # Move up/down bounds
         if current_index > 0:
             self.parent().menuActionMoveUp.setDisabled(False)            
 
@@ -296,15 +311,15 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             parent_id = self._get_parent_id(current_item)
             index = self.treeMenu.currentIndex().row()
 
-            (id, label, action, execute_, item_type) = self.read_item_fields()
+            (id, label, action, execute_, item_type, icon) = self.read_item_fields()
 
             if id and len(id):
                 id = unicode(id)
 
             if item_type == "item":
-                self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_), icon=None, new_id=id)
+                self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_), unicode(icon), new_id=id)
             elif item_type == "menu":
-                self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id)
+                self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id, icon=icon)
             
             current_item.setText(self.COL_LABEL, label)
             current_item.setText(self.COL_ACTION, action)
@@ -327,8 +342,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         action = self.cmbAction.currentText()
         exe = self.txtExecute.text()
         item_type = current_item.text(self.COL_TYPE)
+        icon = self.txtIcon.text()
 
-        return (id, label, action, exe, item_type)
+        return (id, label, action, exe, item_type, icon)
 
     def new_item(self):
         """
