@@ -261,9 +261,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         
         if status and self.changed is False:
             self.parent().menuActionSave.setDisabled(False)
-            self.parent().setWindowTitle(title + " *")
+            self.parent().setWindowTitle(title + " - Unsaved changes")
         elif status is False and self.changed is True:        
-            newTitle = title[0:-2]
+            newTitle = title[0:-18]
             self.parent().setWindowTitle(newTitle)
             self.parent().menuActionSave.setDisabled(True)
             
