@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from lib.obmenuxml import ObMenuXml 
 from lxml import etree
-import unittest, os
+import unittest
+import os
+
+from lib.obmenuxml import ObMenuXml
+
 
 class TestObMenuXml(unittest.TestCase):
 

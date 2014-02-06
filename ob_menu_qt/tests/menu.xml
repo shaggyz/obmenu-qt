@@ -91,7 +91,7 @@
 		<item icon="/usr/share/icons/oxygen/22x22/actions/system-shutdown.png" label="Shutdown">
 			<action name="Execute">
 				<prompt>
-            		Are you sure? shutdown? mothafucka!
+            		Are you sure? shutdown?
         		</prompt>
 				<execute>gksudo "/sbin/shutdown -h now"</execute>
 			</action>

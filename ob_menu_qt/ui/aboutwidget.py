@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui
-from ui.about import Ui_frmAbout
 import os
+
+from ob_menu_qt.ui.about import Ui_frmAbout
+
 
 class ObAboutWidget(Ui_frmAbout, QtGui.QWidget):
     """

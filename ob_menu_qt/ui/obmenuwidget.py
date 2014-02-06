@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt4 import QtGui, QtCore
-from ui.obmenu import Ui_frmObmenu
-from lib.obmenuxml import ObMenuXml
+from PyQt4 import QtGui
+from ob_menu_qt.ui.obmenu import Ui_frmObmenu
+from ob_menu_qt.lib.obmenuxml import ObMenuXml
 import os
 
 class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
