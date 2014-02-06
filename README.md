@@ -1,16 +1,27 @@
-obmenu-qt
-=======
+Openbox menu editor
+===================
+
+![Image](../blob/master/doc/snapshot.png?raw=true)
 
 Description:
 ------------
 
-obmenu-qt is an Openbox menu editor, written in python and Qt libraries. It allows to edit menus
-in an intuitive way. 
+Obmenu-qt is an Openbox menu editor, written in python and Qt libraries. It allows to edit menus
+in an intuitive way. It was inspired (and forked in first instance, but was rewritten from scratch finally)
+on another very popular menu editor: http://obmenu.sourceforge.net
 
-It was inspired (and forked in first instance) on another menu editor very popular:
-http://obmenu.sourceforge.net 
 
-Note: program is under development, this message will be removed on release
+Installation:
+-------------
+
+Install on the system, requires root privileges (recommended)
+
+<code>sudo python setup.py install</code>
+
+Install for the current user only:
+
+<code>python setup.py --local install</code>
+
 
 Requirements:
 -------------
@@ -19,14 +30,27 @@ Requirements:
 - python-qt >= 4
 - python-lxml 
 
+
 Usage:
 ------
 
-On a X11 environment:
+Once installation finishes, the *obmenu-qt* executable should be in a system path like /usr/local/bin
+and can be started from any terminal:
 
-<code>./obmenu-qt</code>
+<code>obmenu-qt</code>
 
-Some unit tests can be executed:
 
-<code>./run_tests</code>
+To do / Changes / Known issues:
+----------------------
+
+- [X] Installation script
+- [ ] Move up-down from a submenu to another submenu
+- [ ] Debian package
+- [ ] Open menu file vie menu
+- [ ] Save as.. a menu file via menu
+
+If you found an error/bug (for sure) on this program please report it on github project site:
+https://github.com/shaggyz/obmenu-qt (in the issue tracker)
+
+
 
