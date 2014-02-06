@@ -18,16 +18,16 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     COL_ID = 4
     COL_ICON = 5
 
-    def __init__(self):
+    def __init__(self, icon_path):
         """
         Constructs the main window
         """
         super(QtGui.QWidget, self).__init__()
         self.setupUi(self)
+        self.icon_path = icon_path
 
         # selected item reminder
         self.last_selected = None
-
         self.init_tree()
 
         # Combo options
@@ -95,8 +95,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Iterates over all the menu nodes recursively 
         and creates the items for QTreeWidget
         """
-        icon_path = os.getcwd() + "/icons/"
-
         if parent is None:
             parent = self.root_tree
 
@@ -138,7 +136,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     if "icon" in element.keys():
                         child.setIcon(self.COL_LABEL, QtGui.QIcon(element.get("icon")))
                     else:
-                        child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "document-open-folder.png"))
+                        child.setIcon(self.COL_LABEL, QtGui.QIcon(self.icon_path + "document-open-folder.png"))
                     # if a menu does not have label
                     # the id attribute is used instead
                     if "label" not in element.keys():
@@ -151,7 +149,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     if "icon" in element.keys():
                         child.setIcon(self.COL_LABEL, QtGui.QIcon(element.get("icon")))
                     else:
-                        child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "application-x-desktop.png"))
+                        child.setIcon(self.COL_LABEL, QtGui.QIcon(self.icon_path + "application-x-desktop.png"))
                     # we need to find actions
                     if len(element):
                         action = element[0]
@@ -165,7 +163,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                                     child.setText(self.COL_EXECUTE, item.text)
 
                 if item_type == "separator":
-                    child.setIcon(self.COL_LABEL, QtGui.QIcon(icon_path + "separator.png"))
+                    child.setIcon(self.COL_LABEL, QtGui.QIcon(self.icon_path + "separator.png"))
                     child.setText(self.COL_ACTION, "---")
                     child.setText(self.COL_EXECUTE, "---")
                     child.setText(self.COL_ID, "---")

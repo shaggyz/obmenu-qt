@@ -41,8 +41,11 @@ class ObMenuQt(object):
         Starts the main window
         """
         QTApp = QtGui.QApplication(sys.argv)
-        
-        mainWindow = UiMainWindow()
+
+        app_dir = os.path.dirname(os.path.realpath(__file__))
+        icon_dir = app_dir + os.path.sep + "icons/"
+
+        mainWindow = UiMainWindow(icon_path=icon_dir)
         mainWindow.setGeometry(QStyle.alignedRect(QtCore.Qt.LeftToRight, QtCore.Qt.AlignCenter, mainWindow.size(), QTApp.desktop().availableGeometry()))
         mainWindow.show()
 

@@ -3,23 +3,22 @@
 from PyQt4 import QtGui, QtCore
 from ui.obmenuwidget import ObMenuWidget
 from ui.aboutwidget import ObAboutWidget
-import os
 
 class UiMainWindow(QtGui.QMainWindow):
     
-    def __init__(self, autoConfigure=True):
+    def __init__(self, autoConfigure=True, icon_path=None):
         """
         Constructs the main window
         """
         super(QtGui.QMainWindow, self).__init__()
 
         # openbox menu widget
-        self.frmMenu = ObMenuWidget()
+        self.frmMenu = ObMenuWidget(icon_path=icon_path)
         self.frmMenu.show()
         self.setCentralWidget(self.frmMenu)
 
         # window configs
-        self.iconPath = os.getcwd() + "/icons/"
+        self.iconPath = icon_path
         self.setWindowTitle("Openbox menu configuration")
         self.setWindowIcon(QtGui.QIcon(self.iconPath + "mnu48.png"))
 
