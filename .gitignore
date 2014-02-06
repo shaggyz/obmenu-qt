@@ -13,3 +13,6 @@ build
 # Python egg metadata, regenerated from source files by setuptools.
 *.egg-info
 *.egg
+
+# Debian package folder
+deb_dist
