@@ -1,7 +1,7 @@
 Openbox menu editor
 ===================
 
-![Image](../blob/master/doc/snapshot.png?raw=true)
+![Image](../master/doc/snapshot.png?raw=true)
 
 Description:
 ------------
