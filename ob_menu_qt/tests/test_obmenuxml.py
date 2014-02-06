@@ -4,13 +4,13 @@ from lxml import etree
 import unittest
 import os
 
-from lib.obmenuxml import ObMenuXml
+from ob_menu_qt.lib.obmenuxml import ObMenuXml
 
 
 class TestObMenuXml(unittest.TestCase):
 
     def setUp(self):
-        file_path = os.getcwd() + "/tests/menu.xml"
+        file_path = os.getcwd() + "/ob_menu_qt/tests/menu.xml"
         self.ob = ObMenuXml(file_path)
         self.ob.load_xml()
 
