@@ -5,10 +5,9 @@ import sys
 import os
 import argparse
 from PyQt4 import QtGui, QtCore
-
 from PyQt4.QtGui import QStyle
 
-from ob_menu_qt.ui.main import UiMainWindow
+from .ui.main import UiMainWindow
 
 
 class ObMenuQt(object):
@@ -42,7 +41,7 @@ class ObMenuQt(object):
         QTApp = QtGui.QApplication(sys.argv)
 
         app_dir = os.path.dirname(os.path.realpath(__file__))
-        icon_dir = app_dir + os.path.sep + "ob_menu_qt" + os.path.sep + "icons" + os.path.sep
+        icon_dir = app_dir + os.path.sep + "icons" + os.path.sep
 
         mainWindow = UiMainWindow(icon_path=icon_dir)
         mainWindow.setGeometry(QStyle.alignedRect(QtCore.Qt.LeftToRight, QtCore.Qt.AlignCenter, mainWindow.size(), QTApp.desktop().availableGeometry()))
@@ -50,10 +49,13 @@ class ObMenuQt(object):
 
         sys.exit(QTApp.exec_())
 
+def main():
+    app = ObMenuQt()
+    app.start()
+
 
 """
 Static application entry poiny
 """
 if __name__ == "__main__":
-    app = ObMenuQt()
-    app.start()
+    main()
