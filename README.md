@@ -14,7 +14,8 @@ on another very popular menu editor: http://obmenu.sourceforge.net
 Installation:
 -------------
 
-Install on the system, requires root privileges (recommended)
+Install on the system, requires root privileges (recommended):
+
 <code>$ sudo python setup.py install</code>
 
 Install for the current user only:
