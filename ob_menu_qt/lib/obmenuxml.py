@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from IPython.core.debugger import prompt
 
 from lxml import etree
 import copy
@@ -72,7 +73,7 @@ class ObMenuXml(object):
         """
         return node.tag is etree.Comment
 
-    def edit_item(self, type_, parent_id=None, index=0, label=None, action=None, execute_=None, icon=None, new_id=None):
+    def edit_item(self, type_, parent_id=None, index=0, label=None, action=None, execute_=None, icon=None, new_id=None, prompt=None):
         """
         Edit a menu item
         """
@@ -95,6 +96,9 @@ class ObMenuXml(object):
                 if execute_ is not None:
                     execute_item = self._get_item_element("execute", item)
                     execute_item.text = execute_
+                if prompt is not None:
+                    prompt_item = self._get_item_element("prompt", item)
+                    prompt_item.text = prompt
 
             return True
 
