@@ -88,6 +88,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionOpen = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-open.png"), "Open...", self)
         self.menuActionOpen.setShortcut("Ctrl+O")
         self.menuActionOpen.setStatusTip("Open menu file...")
+        self.menuActionOpen.triggered.connect(self.frmMenu.open_menu_file)
         
         # Save
         self.menuActionSave = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save.png"), "Save", self)

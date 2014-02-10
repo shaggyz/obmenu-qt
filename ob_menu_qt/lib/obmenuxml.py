@@ -34,6 +34,7 @@ class ObMenuXml(object):
             return True
 
         except (IOError, Exception), e:
+            print e
             return False
 
     def get_tree(self):
@@ -157,7 +158,7 @@ class ObMenuXml(object):
             if file_path is None:
                 file_path = self.file_path
 
-            self.tree.write(file_path, pretty_print=True)
+            self.tree.write(file_path, pretty_print=True, xml_declaration=True, encoding="utf-8")
             return True
         except Exception, e:
             print e

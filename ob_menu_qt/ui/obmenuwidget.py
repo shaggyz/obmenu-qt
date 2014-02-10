@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 import new
 from ob_menu_qt.ui.obmenu import Ui_frmObmenu
 from ob_menu_qt.lib.obmenuxml import ObMenuXml
@@ -27,6 +27,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         super(QtGui.QWidget, self).__init__()
         self.setupUi(self)
         self.icon_path = icon_path
+
+        # current file path
+        self.file_path = self.get_base_menu_file()
 
         # selected item reminder
         self.last_selected = None
@@ -70,8 +73,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
         self.treeMenu.setColumnHidden(self.COL_ICON, True)
         self.treeMenu.setColumnHidden(self.COL_PROMPT, True)
-
-        self.file_path = self.get_base_menu_file()
 
         if self.file_path:
 
@@ -178,6 +179,35 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                     child.setText(self.COL_ID, "---")
 
                 index += 1
+
+    def open_menu_file(self):
+        """
+        Slot: Opens an external menu file
+        """
+        file_path = QtGui.QFileDialog.getOpenFileName(self,
+                                                      "Select a configuration file to load",
+                                                      QtCore.QDir.home().path(),
+                                                      "Configuration files (*.xml);;All files (*.*)")
+
+        if len(file_path):
+
+            # file changed
+            if self.changed:
+                user_response = QtGui.QMessageBox.question(self,
+                                           "Save the changes before open",
+                                           "There are unsaved changes in current file",
+                                            QtGui.QMessageBox.Discard,
+                                            QtGui.QMessageBox.Save,
+                                            QtGui.QMessageBox.Cancel)
+
+                # unsaved changes
+                if user_response == QtGui.QMessageBox.Save:
+                    self.save_changes()
+
+            # new file
+            self.file_path = str(file_path)
+            self.init_tree()
+
 
     def get_base_menu_file(self):
         """
@@ -613,9 +643,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Slot: called when change
         icon button is clicked
         """
-        file_dialog = QtGui.QFileDialog()
-        file_dialog.setViewMode(1)
-        new_icon_path = file_dialog.getOpenFileName(self, "Select the new icon file", "/usr/share/icons", "Images (*.png *.xpm *.jpg)")
+        new_icon_path = QtGui.QFileDialog.getOpenFileName(self, "Select the new icon file", "/usr/share/icons", "Images (*.png *.xpm *.jpg)")
         self.txtIcon.setText(new_icon_path)
         self.update_selected_item()
         self.set_changed()
