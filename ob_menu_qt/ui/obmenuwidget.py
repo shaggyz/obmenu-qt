@@ -163,7 +163,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                                     child.setText(self.COL_EXECUTE, item.text)
 
                 if item_type == "separator":
+                    print self.icon_path + "separator.png"
                     child.setIcon(self.COL_LABEL, QtGui.QIcon(self.icon_path + "separator.png"))
+                    child.setText(self.COL_LABEL, "---")
                     child.setText(self.COL_ACTION, "---")
                     child.setText(self.COL_EXECUTE, "---")
                     child.setText(self.COL_ID, "---")

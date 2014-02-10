@@ -47,9 +47,9 @@ The development still active there are a few features not yet implemented:
 - [X] Installation script
 - [ ] Move up-down from a submenu to another submenu
 - [ ] Debian package
-- [ ] Open menu file vie menu
+- [ ] Open menu file via menu
 - [ ] Save as.. a menu file via menu
-- [ ] New menu file vie menu
+- [ ] New menu file via menu
 
 If you find an error/bug (for sure) on this program please report it on github project site:
 https://github.com/shaggyz/obmenu-qt (in the issue tracker)
