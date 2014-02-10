@@ -26,6 +26,10 @@ class ObMenuXml(object):
             self.tree = etree.parse(self.file_path, parser)
 
             root = self.get_root()
+
+            if "openbox_menu" != self.get_item_tag(root):
+                raise Exception("Invalid file format!")
+
             self.menu = root[0]
             return True
 
@@ -96,11 +100,19 @@ class ObMenuXml(object):
                 if execute_ is not None:
                     execute_item = self._get_item_element("execute", item)
                     execute_item.text = execute_
-                if prompt is not None:
-                    prompt_item = self._get_item_element("prompt", item)
-                    prompt_item.text = prompt
 
-            return True
+                prompt_item = self._get_item_element("prompt", item)
+                if prompt is not None:
+                    if prompt_item is None:
+                        # we need to add the new prompt element
+                        prompt_item = etree.Element("{http://openbox.org/}prompt")
+                        action_item.insert(0, prompt_item)
+                    prompt_item.text = prompt
+                else:
+                    if prompt_item is not None:
+                        action_item.remove(prompt_item)
+
+                return True
 
         return False
 

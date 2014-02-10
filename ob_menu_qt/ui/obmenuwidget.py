@@ -331,9 +331,12 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             if id and len(id):
                 id = unicode(id)
 
+            if prompt and len(prompt):
+                prompt = unicode(prompt)
+
             if item_type == "item":
                 self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_),
-                                       unicode(icon), new_id=id, prompt=unicode(prompt))
+                                       unicode(icon), new_id=id, prompt=prompt)
 
             elif item_type == "menu":
                 self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id, icon=unicode(icon))
@@ -341,6 +344,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             current_item.setText(self.COL_LABEL, label)
             current_item.setText(self.COL_ACTION, action)
             current_item.setText(self.COL_EXECUTE, execute_)
+
+            if prompt:
+                current_item.setText(self.COL_PROMPT, prompt)
 
             if id:
                 current_item.setText(self.COL_ID, id)
@@ -607,7 +613,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         Slot: called when change
         icon button is clicked
         """
-        new_icon_path = QtGui.QFileDialog.getOpenFileName(self, "Select the new icon file", "/usr/share/icons", "Images (*.png *.xpm *.jpg)")
+        file_dialog = QtGui.QFileDialog()
+        file_dialog.setViewMode(1)
+        new_icon_path = file_dialog.getOpenFileName(self, "Select the new icon file", "/usr/share/icons", "Images (*.png *.xpm *.jpg)")
         self.txtIcon.setText(new_icon_path)
         self.update_selected_item()
         self.set_changed()

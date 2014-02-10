@@ -48,6 +48,7 @@ The development still active there are a few features not yet implemented:
 - [X] Installation script
 - [X] Move up-down from a submenu to another submenu
 - [X] Prompt messages should be able to be edited
+- [X] Check if xml loaded file is a openbox menu configuration file
 - [ ] Open menu file via menu
 - [ ] Save as.. a menu file via menu
 - [ ] New menu file via menu
