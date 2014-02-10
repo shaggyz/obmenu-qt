@@ -101,6 +101,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionSaveAs = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-save-as.png"), "Save As...", self)
         self.menuActionSaveAs.setShortcut("Ctrl+Shift+S")
         self.menuActionSaveAs.setStatusTip("Save menu as...")
+        self.menuActionSaveAs.triggered.connect(self.frmMenu.save_menu_as)
 
         # Exit
         self.menuActionQuit = QtGui.QAction(QtGui.QIcon(self.iconPath + "system-shutdown.png"), "Quit", self)

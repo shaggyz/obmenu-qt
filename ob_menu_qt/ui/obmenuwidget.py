@@ -208,6 +208,27 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.file_path = str(file_path)
             self.init_tree()
 
+    def save_menu_as(self):
+        """
+        Slot: Exports the current menu to a new file
+        """
+        save_file_path = QtGui.QFileDialog.getSaveFileName(self,
+                                                        "Save current menu as:",
+                                                        QtCore.QDir.home().path(),
+                                                        "Configuration files (*.xml);;All files (*.*)")
+
+        if len(save_file_path):
+
+            save_file_path = str(save_file_path)
+
+            if save_file_path[-4:] != ".xml":
+                save_file_path += ".xml"
+
+            if self.ob_menu.save_menu(save_file_path):
+                self.parent().statusBar().showMessage("File saved in " + save_file_path, 3000)
+            else:
+                self.parent().statusBar().showMessage("Error during file creation", 3000)
+
 
     def get_base_menu_file(self):
         """
@@ -658,8 +679,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                 self.set_changed(False)
                 self.parent().statusBar().showMessage("Changes saved", 3000)
                 self.init_tree()
+                return True
             else:
                 self.parent().statusBar().showMessage("Error saving changes", 3000)    
         else: 
             self.parent().statusBar().showMessage("No chanches detected", 3000)
+
+        return False
 
