@@ -46,11 +46,12 @@ To do / Changes / Known issues:
 The development still active there are a few features not yet implemented:
 
 - [X] Installation script
-- [ ] Move up-down from a submenu to another submenu
-- [ ] Debian package
+- [X] Move up-down from a submenu to another submenu
+- [ ] Prompt messages should be able to be edited
 - [ ] Open menu file via menu
 - [ ] Save as.. a menu file via menu
 - [ ] New menu file via menu
+- [ ] Debian package
 
 If you find an error/bug (for sure) on this program please report it on github project site:
 https://github.com/shaggyz/obmenu-qt (in the issue tracker)

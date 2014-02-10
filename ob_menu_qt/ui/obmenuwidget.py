@@ -214,10 +214,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.cmbAction.setDisabled(selIndex == -1)
         self.cmbAction.setCurrentIndex(selIndex)
 
-        self.parent().menuActionMoveUp.setDisabled(True)            
-        self.parent().menuActionMoveDown.setDisabled(True)            
-
-        # widget status in function of 
+        # widget status in function of
         # selected item type
         if item_type == "separator":
 
@@ -255,11 +252,17 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         current_index = self.treeMenu.currentIndex().row()
 
         # Move up/down bounds
-        if current_index > 0:
-            self.parent().menuActionMoveUp.setDisabled(False)            
+        if current_index > 0 or item.parent().text(self.COL_ID) != "root-menu":
+            self.parent().menuActionMoveUp.setDisabled(False)
+        else:
+            self.parent().menuActionMoveUp.setDisabled(True)
 
-        if item.parent() and current_index < (item.parent().childCount()-1):
-            self.parent().menuActionMoveDown.setDisabled(False)            
+        down_bounds = item.parent() and current_index < (item.parent().childCount()-1)
+
+        if down_bounds or item.parent().text(self.COL_ID) != "root-menu":
+            self.parent().menuActionMoveDown.setDisabled(False)
+        else:
+            self.parent().menuActionMoveDown.setDisabled(True)
 
 
     def reconfigure_openbox(self):
@@ -499,33 +502,58 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         item = self.treeMenu.currentItem()
         index = self.treeMenu.currentIndex().row()
         item_type = item.text(self.COL_TYPE)
-        parent_id = self._get_parent_id(item)        
+        parent_id = self._get_parent_id(item)
+        dest_parent_id = parent_id
+
+        item_above = self.treeMenu.itemAbove(item)
+        item_below = self.treeMenu.itemBelow(item)
 
         parent = item.parent()
         clone = parent.takeChild(index)
 
         if direction == "up":
-            if index > 0:
-                new_index = index - 1  
+            # the item is moving to another submenu
+            if item_above.text(self.COL_TYPE) == "menu" or item_above.parent().text(self.COL_ID) != parent.text(self.COL_ID):
+                # already child of current submenu
+                if item_above.parent().text(self.COL_ID) != parent.text(self.COL_ID):
+                    parent = item_above.parent()
+                    new_index = parent.indexOfChild(item_above)
+                    dest_parent_id = parent.text(self.COL_ID)
+                else:
+                    parent = item_above
+                    new_index = item_above.childCount()
+                    dest_parent_id = item_above.text(self.COL_ID)
+            # normal movement
+            elif index > 0:
+                new_index = index - 1
+            # menu bounds
             else:
                 self.parent().statusBar().showMessage("Item top limit", 3000)
                 return
         else:
-            new_index = index + 1
-            if new_index >= parent.childCount():
-                self.parent().statusBar().showMessage("Item bottom limit", 3000)
-                return
+            # the item is moving to another submenu
+            if item_below.text(self.COL_TYPE) == "menu":
+                parent = item_below
+                new_index = 0
+                dest_parent_id = item_below.text(self.COL_ID)
+            else:
+                new_index = index + 1
+                # menu bounds
+                if new_index > parent.childCount():
+                    # already child of current submenu
+                    if item_below.parent().text(self.COL_ID != parent.text(self.COL_ID)):
+                        parent = item_below.parent()
+                        new_index = parent.indexOfChild(item_below)
+                        dest_parent_id = parent.text(self.COL_ID)
+                    else:
+                        self.parent().statusBar().showMessage("Item bottom limit", 3000)
+                        return
 
         parent.setExpanded(True)
         clone.setExpanded(True)
 
-        """
-        TODO: if there is a menu-type item on destination
-        the moved item must be placed inside that item at index zero
-        """
-
         parent.insertChild(new_index, clone)
-        self.ob_menu.move_item(item_type, index, new_index, parent_id, parent_id)
+        self.ob_menu.move_item(item_type, index, new_index, dest_parent_id, parent_id)
         self.treeMenu.setCurrentItem(clone)
         self.load_item(clone)
 
