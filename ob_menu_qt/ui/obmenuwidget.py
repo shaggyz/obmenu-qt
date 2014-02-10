@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui
+import new
 from ob_menu_qt.ui.obmenu import Ui_frmObmenu
 from ob_menu_qt.lib.obmenuxml import ObMenuXml
 import os
@@ -17,6 +18,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     COL_EXECUTE = 3
     COL_ID = 4
     COL_ICON = 5
+    COL_PROMPT = 6
 
     def __init__(self, icon_path):
         """
@@ -45,6 +47,8 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.cmbAction.setDisabled(True)
         self.txtIcon.setDisabled(True)
         self.btnChangeIcon.setDisabled(True)
+        self.btnPrompt.setDisabled(True)
+        self.btnPrompt.setIcon(QtGui.QIcon(icon_path + "view-conversation-balloon.png"))
 
         # tree columns
         self.treeMenu.header().setResizeMode(self.COL_LABEL, QtGui.QHeaderView.ResizeToContents)
@@ -59,12 +63,13 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         self.treeMenu.clear()
         self.treeMenu.setColumnCount(6)
-        self.treeMenu.setHeaderLabels(["Label", "Type", "Action", "Execute", "ID", "Icon"])
+        self.treeMenu.setHeaderLabels(["Label", "Type", "Action", "Execute", "ID", "Icon", "Prompt"])
         self.treeMenu.setSortingEnabled(False)
         self.treeMenu.setAlternatingRowColors(True)
         self.treeMenu.setColumnWidth(self.COL_LABEL, 150)
 
         self.treeMenu.setColumnHidden(self.COL_ICON, True)
+        self.treeMenu.setColumnHidden(self.COL_PROMPT, True)
 
         self.file_path = self.get_base_menu_file()
 
@@ -161,6 +166,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
                                 # execute
                                 if self.ob_menu.get_item_tag(item) == "execute":
                                     child.setText(self.COL_EXECUTE, item.text)
+                                # prompt
+                                if self.ob_menu.get_item_tag(item) == "prompt":
+                                    child.setText(self.COL_PROMPT, item.text)
 
                 if item_type == "separator":
                     child.setIcon(self.COL_LABEL, QtGui.QIcon(self.icon_path + "separator.png"))
@@ -196,6 +204,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.txtExecute.textEdited.connect(self.update_selected_item)
         self.txtIcon.textEdited.connect(self.update_selected_item)
         self.btnChangeIcon.clicked.connect(self.change_icon_path)
+        self.btnPrompt.clicked.connect(self.update_item_prompt)
 
     def load_item(self, item):
         """
@@ -224,6 +233,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.cmbAction.setDisabled(True)
             self.txtIcon.setDisabled(True)
             self.btnChangeIcon.setDisabled(True)
+            self.btnPrompt.setDisabled(True)
 
         elif item_type == "menu":
 
@@ -233,6 +243,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.cmbAction.setDisabled(True)
             self.txtIcon.setDisabled(False)
             self.btnChangeIcon.setDisabled(False)
+            self.btnPrompt.setDisabled(True)
 
         elif item_type == "item":
 
@@ -242,6 +253,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.cmbAction.setDisabled(False)
             self.txtIcon.setDisabled(False)
             self.btnChangeIcon.setDisabled(False)
+            self.btnPrompt.setDisabled(False)
 
         self.parent().menuActionDelete.setDisabled(False)
         self.parent().menuActionMenu.setDisabled(False)
@@ -263,7 +275,6 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             self.parent().menuActionMoveDown.setDisabled(False)
         else:
             self.parent().menuActionMoveDown.setDisabled(True)
-
 
     def reconfigure_openbox(self):
         """
@@ -315,13 +326,15 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             parent_id = self._get_parent_id(current_item)
             index = self.treeMenu.currentIndex().row()
 
-            (id, label, action, execute_, item_type, icon) = self.read_item_fields()
+            (id, label, action, execute_, item_type, icon, prompt) = self.read_item_fields()
 
             if id and len(id):
                 id = unicode(id)
 
             if item_type == "item":
-                self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_), unicode(icon), new_id=id)
+                self.ob_menu.edit_item("item", parent_id, index, unicode(label), unicode(action), unicode(execute_),
+                                       unicode(icon), new_id=id, prompt=unicode(prompt))
+
             elif item_type == "menu":
                 self.ob_menu.edit_item("menu", parent_id, index, label=unicode(label), new_id=id, icon=unicode(icon))
             
@@ -347,8 +360,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         exe = self.txtExecute.text()
         item_type = current_item.text(self.COL_TYPE)
         icon = self.txtIcon.text()
+        prompt = None if len(current_item.text(self.COL_PROMPT)) < 1 else current_item.text(self.COL_PROMPT)
 
-        return (id, label, action, exe, item_type, icon)
+        return (id, label, action, exe, item_type, icon, prompt)
 
     def new_item(self):
         """
@@ -558,6 +572,19 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.load_item(clone)
 
         self.set_changed()
+
+    def update_item_prompt(self):
+        """
+        Slot: Updates prompt property of current item
+        """
+        current_prompt = self.treeMenu.currentItem().text(self.COL_PROMPT).trimmed()
+        new_prompt = QtGui.QInputDialog.getText(self, "Edit prompt message", "Prompt message: ", text=current_prompt)
+
+        # accepted and changed
+        if new_prompt[1] and new_prompt[0] != current_prompt:
+            self.treeMenu.currentItem().setText(self.COL_PROMPT, new_prompt[0].trimmed())
+            self.update_selected_item()
+            self.set_changed()
 
     def _update_last_selected(self):
         """

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'obmenu.ui'
 #
-# Created: Wed Feb  5 15:26:01 2014
+# Created: Mon Feb 10 16:33:53 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -107,6 +107,9 @@ class Ui_frmObmenu(object):
         self.btnChangeIcon = QtGui.QPushButton(frmObmenu)
         self.btnChangeIcon.setObjectName(_fromUtf8("btnChangeIcon"))
         self.horizontalLayout_5.addWidget(self.btnChangeIcon)
+        self.btnPrompt = QtGui.QPushButton(frmObmenu)
+        self.btnPrompt.setObjectName(_fromUtf8("btnPrompt"))
+        self.horizontalLayout_5.addWidget(self.btnPrompt)
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
         self.verticalLayout_2.addLayout(self.verticalLayout_3)
 
@@ -121,4 +124,5 @@ class Ui_frmObmenu(object):
         self.lblExecute.setText(_translate("frmObmenu", "Execute", None))
         self.label.setText(_translate("frmObmenu", "Icon      ", None))
         self.btnChangeIcon.setText(_translate("frmObmenu", "Change Icon", None))
+        self.btnPrompt.setText(_translate("frmObmenu", "Prompt", None))
 
