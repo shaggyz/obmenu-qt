@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
-import new
 from ob_menu_qt.ui.obmenu import Ui_frmObmenu
 from ob_menu_qt.lib.obmenuxml import ObMenuXml
 import os
@@ -194,26 +193,51 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
             # file changed
             if self.changed:
                 user_response = QtGui.QMessageBox.question(self,
-                                           "Save the changes before open",
-                                           "There are unsaved changes in current file",
-                                            QtGui.QMessageBox.Discard,
-                                            QtGui.QMessageBox.Save,
-                                            QtGui.QMessageBox.Cancel)
+                                                           "Save the changes before load a new file",
+                                                           "There are unsaved changes in the current file",
+                                                            QtGui.QMessageBox.Discard,
+                                                            QtGui.QMessageBox.Save,
+                                                            QtGui.QMessageBox.Cancel)
 
                 # unsaved changes
                 if user_response == QtGui.QMessageBox.Save:
                     self.save_changes()
 
-            # new file
+            # the new file is loaded
             self.file_path = str(file_path)
             self.init_tree()
 
-    def save_menu_as(self):
+    def new_menu_file(self):
+        """
+        Creates a new menu configuration file
+        """
+        # file changed
+        if self.changed:
+            user_response = QtGui.QMessageBox.question(self,
+                                                       "Save the changes before to create a new file",
+                                                       "There are unsaved changes in the current file",
+                                                        QtGui.QMessageBox.Discard,
+                                                        QtGui.QMessageBox.Save,
+                                                        QtGui.QMessageBox.Cancel)
+
+            # unsaved changes
+            if user_response == QtGui.QMessageBox.Save:
+                self.save_changes()
+
+        # a new file is created
+        self.ob_menu.new_file()
+        self.save_menu_as(True, title="Choose a location for the new menu file")
+
+
+    def save_menu_as(self, load=False, title=None):
         """
         Slot: Exports the current menu to a new file
         """
+        if title is None:
+            title = "Save current menu as:"
+
         save_file_path = QtGui.QFileDialog.getSaveFileName(self,
-                                                        "Save current menu as:",
+                                                        title,
                                                         QtCore.QDir.home().path(),
                                                         "Configuration files (*.xml);;All files (*.*)")
 
@@ -226,6 +250,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
 
             if self.ob_menu.save_menu(save_file_path):
                 self.parent().statusBar().showMessage("File saved in " + save_file_path, 3000)
+
+                if load:
+                    self.file_path = save_file_path
+                    self.init_tree()
+
             else:
                 self.parent().statusBar().showMessage("Error during file creation", 3000)
 
@@ -310,6 +339,11 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.parent().menuActionMenu.setDisabled(False)
         self.parent().menuActionItem.setDisabled(False)
         self.parent().menuActionSeparator.setDisabled(False)
+
+        # The root node does not needs the
+        # computation of the bounds
+        if item.parent() is None:
+            return
 
         # Move buttons
         current_index = self.treeMenu.currentIndex().row()

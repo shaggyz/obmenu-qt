@@ -83,6 +83,7 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionNew = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-new.png"), "New", self)
         self.menuActionNew.setShortcut("Ctrl+N")
         self.menuActionNew.setStatusTip("New menu file")
+        self.menuActionNew.triggered.connect(self.frmMenu.new_menu_file)
 
         # Open
         self.menuActionOpen = QtGui.QAction(QtGui.QIcon(self.iconPath + "document-open.png"), "Open...", self)

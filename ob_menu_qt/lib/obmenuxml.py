@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from IPython.core.debugger import prompt
-
 from lxml import etree
 import copy
 
@@ -36,6 +34,22 @@ class ObMenuXml(object):
         except (IOError, Exception), e:
             print e
             return False
+
+    def new_file(self):
+        """
+        Creates a new xml structure for a new file
+        """
+        xml = '<openbox_menu xmlns="http://openbox.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' \
+              'xsi:schemaLocation="http://openbox.org/ file:///usr/share/openbox/menu.xsd"> ' \
+              '<menu id="root-menu" label="Openbox 3">' \
+              '</menu>' \
+              '</openbox_menu>'
+
+        parser = etree.XMLParser(remove_blank_text=True)
+        self.tree = etree.ElementTree(etree.XML(xml, parser))
+
+        root = self.get_root()
+        self.menu = root[0]
 
     def get_tree(self):
         """
