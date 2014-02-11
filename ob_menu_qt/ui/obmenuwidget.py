@@ -19,7 +19,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     COL_ICON = 5
     COL_PROMPT = 6
 
-    def __init__(self, icon_path):
+    def __init__(self, icon_path, file_path=None):
         """
         Constructs the main window
         """
@@ -28,7 +28,10 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         self.icon_path = icon_path
 
         # current file path
-        self.file_path = self.get_base_menu_file()
+        if file_path is None:
+            file_path = self.get_base_menu_file()
+
+        self.file_path = file_path
 
         # selected item reminder
         self.last_selected = None

@@ -40,7 +40,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblVersion">
+        <widget class="QLabel" name="label_10">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -49,6 +49,19 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblVersion">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>beta</string>
          </property>
         </widget>
        </item>
@@ -106,7 +119,13 @@
      <item>
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nicolás Daniel Palumbo &amp;lt;&lt;a href=&quot;mailto=n@xinax.net&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;n@xinax.net&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;mailto=n@xinax.net&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+&lt;p&gt;Nicolás Daniel Palumbo &amp;lt;&lt;a  href=&quot;mailto:n@xinax.net&quot;&gt;n@xinax.net&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -144,7 +163,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;You can find the application source code, documentation&lt;br&gt; and report errors/bugs on the github project website:&lt;br&gt;&lt;a href=&quot;https://github.com/shaggyz/obmenu-qt&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/shaggyz/obmenu-qt&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="openExternalLinks">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -180,6 +199,9 @@
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This program was released under the General Public License 2, (C) 2014&lt;br&gt;A full copy of license is in the file COPYING delivered with this application. &lt;br&gt;Also a online version of this file can be found &lt;a href=&quot;https://raw.github.com/shaggyz/obmenu-qt/master/COPYING&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

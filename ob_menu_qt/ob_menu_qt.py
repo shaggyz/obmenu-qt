@@ -13,6 +13,7 @@ class ObMenuQt(object):
     """
     Main program static bootstrap
     """
+    VERSION = "1.0"
     
     def __init__(self):
         """
@@ -24,7 +25,7 @@ class ObMenuQt(object):
         parser = argparse.ArgumentParser(prog="obmenu-qt",
                                          description="Openbox menu editor based on QT4",
                                          epilog="For more info visit: https://github.com/shaggyz/obmenu-qt",
-                                         version="1.0")
+                                         version=self.VERSION)
         
         # arguments
         parser.add_argument("-f", "--file", help="Load this menu file on start")
@@ -42,7 +43,7 @@ class ObMenuQt(object):
         app_dir = os.path.dirname(os.path.realpath(__file__))
         icon_dir = app_dir + os.path.sep + "icons" + os.path.sep
 
-        mainWindow = UiMainWindow(icon_path=icon_dir)
+        mainWindow = UiMainWindow(self.VERSION, icon_path=icon_dir)
         mainWindow.setGeometry(
             QStyle.alignedRect(
                 QtCore.Qt.LeftToRight,

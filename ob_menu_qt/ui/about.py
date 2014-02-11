@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'about.ui'
 #
-# Created: Wed Feb  5 17:53:24 2014
+# Created: Tue Feb 11 16:36:22 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -44,9 +44,17 @@ class Ui_frmAbout(object):
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label.setObjectName(_fromUtf8("label"))
         self.horizontalLayout.addWidget(self.label)
+        self.label_10 = QtGui.QLabel(frmAbout)
+        self.label_10.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_10.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_10.setObjectName(_fromUtf8("label_10"))
+        self.horizontalLayout.addWidget(self.label_10)
         self.lblVersion = QtGui.QLabel(frmAbout)
-        self.lblVersion.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.lblVersion.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lblVersion.sizePolicy().hasHeightForWidth())
+        self.lblVersion.setSizePolicy(sizePolicy)
         self.lblVersion.setObjectName(_fromUtf8("lblVersion"))
         self.horizontalLayout.addWidget(self.lblVersion)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
@@ -76,6 +84,7 @@ class Ui_frmAbout(object):
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.verticalLayout_2.addWidget(self.label_7)
         self.label_8 = QtGui.QLabel(frmAbout)
+        self.label_8.setOpenExternalLinks(True)
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.verticalLayout_2.addWidget(self.label_8)
         spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
@@ -90,7 +99,7 @@ class Ui_frmAbout(object):
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.verticalLayout_2.addWidget(self.label_3)
         self.label_4 = QtGui.QLabel(frmAbout)
-        self.label_4.setOpenExternalLinks(False)
+        self.label_4.setOpenExternalLinks(True)
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.verticalLayout_2.addWidget(self.label_4)
         spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
@@ -105,6 +114,7 @@ class Ui_frmAbout(object):
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.verticalLayout_2.addWidget(self.label_5)
         self.label_6 = QtGui.QLabel(frmAbout)
+        self.label_6.setOpenExternalLinks(True)
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.verticalLayout_2.addWidget(self.label_6)
         self.verticalLayout.addLayout(self.verticalLayout_2)
@@ -115,10 +125,14 @@ class Ui_frmAbout(object):
     def retranslateUi(self, frmAbout):
         frmAbout.setWindowTitle(_translate("frmAbout", "Openbox menu editor - About", None))
         self.label.setText(_translate("frmAbout", "Openbox menu editor", None))
-        self.lblVersion.setText(_translate("frmAbout", "Program version: ", None))
+        self.label_10.setText(_translate("frmAbout", "Program version: ", None))
+        self.lblVersion.setText(_translate("frmAbout", "beta", None))
         self.label_2.setText(_translate("frmAbout", "Simple menu editor for openbox desktop manager.", None))
         self.label_7.setText(_translate("frmAbout", "Author", None))
-        self.label_8.setText(_translate("frmAbout", "<html><head/><body><p>Nicolás Daniel Palumbo &lt;<a href=\"mailto=n@xinax.net\"><span style=\" text-decoration: underline; color:#0000ff;\">n@xinax.net</span></a><a href=\"mailto=n@xinax.net\"><span style=\" color:#000000;\">&gt;</span></a></p></body></html>", None))
+        self.label_8.setText(_translate("frmAbout", "<html>\n"
+"<head/>\n"
+"<body>\n"
+"<p>Nicolás Daniel Palumbo &lt;<a  href=\"mailto:n@xinax.net\">n@xinax.net</a>&gt;</p></body></html>", None))
         self.label_3.setText(_translate("frmAbout", "Contributing", None))
         self.label_4.setText(_translate("frmAbout", "<html><head/><body><p>You can find the application source code, documentation<br> and report errors/bugs on the github project website:<br><a href=\"https://github.com/shaggyz/obmenu-qt\"><span style=\" text-decoration: underline; color:#0000ff;\">https://github.com/shaggyz/obmenu-qt</span></a></p></body></html>", None))
         self.label_5.setText(_translate("frmAbout", "License", None))
