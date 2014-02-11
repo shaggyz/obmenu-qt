@@ -51,7 +51,7 @@ The development still active there are a few features not yet implemented:
 - [X] Check if xml loaded file is a openbox menu configuration file
 - [X] Open menu file via menu
 - [X] Save as.. a menu file via menu
-- [ ] New menu file via menu
+- [X] New menu file via menu
 - [ ] Locale / Internationalization
 - [ ] Debian package
 
