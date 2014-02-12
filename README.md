@@ -11,6 +11,26 @@ in an intuitive way. It was inspired (and forked in first instance, but was rewr
 on another very popular menu editor: http://obmenu.sourceforge.net
 
 
+Requirements:
+-------------
+
+The best way to install this requirements is through a
+package manager like: apt-get, emerge, rpm, yum, etc.
+
+PyQt4 is not available from pip or easy_install
+
+Argparse can be installed from easy_install or pip:
+
+<code>sudo easy_install argparse</code>
+<code>sudo pip install argparse</code>
+
+- python >= 2.3
+- python-setuptools
+- argparse
+- python-qt >= 4
+- python-lxml
+
+
 Installation:
 -------------
 
@@ -21,14 +41,6 @@ Install on the system, requires root privileges (recommended):
 Install for the current user only:
 
 <code>$ python setup.py --local install</code>
-
-
-Requirements:
--------------
-
-- python >= 2.3
-- python-qt >= 4
-- python-lxml
 
 
 Usage:
