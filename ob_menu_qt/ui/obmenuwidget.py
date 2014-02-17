@@ -270,17 +270,27 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         """
         Gets the main openbox menu file
         """
-        menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
+        ob_user_config_dir = os.getenv("HOME") + "/.config/openbox"
+        menu_path = ob_user_config_dir + "/menu.xml"
 
-        if not os.path.isfile(menu_path):
+        try:
 
+            # openbox config dir
+            if not os.path.isdir(ob_user_config_dir):
+                os.mkdir(ob_user_config_dir)
+
+            # base config file is copied
             if os.path.isfile(self.OB_ORIGINAL_FILE):
                 shutil.copy2(self.OB_ORIGINAL_FILE, menu_path)
-            else:
-                QtGui.QMessageBox.warning(self,
-                                        "Missing menu file",
-                                        "You don't have a menu configuration file in your home directory. Is openbox installed?")
-                return None
+
+            # file was created?
+            if not os.path.isfile(menu_path):
+                raise Exception("The basic configuration file cannot be created. Is openbox installed?")
+
+        except (IOError, Exception), e:
+
+            QtGui.QMessageBox.warning(self, "Error loading menu file", e)
+            return None
 
         return menu_path
 
