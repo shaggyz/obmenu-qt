@@ -6,9 +6,8 @@ Openbox menu editor
 Description:
 ------------
 
-Obmenu-qt is an Openbox menu editor, written in python and Qt libraries. It allows to edit menus
-in an intuitive way. It was inspired (and forked in first instance, but was rewritten from scratch finally)
-on another very popular menu editor: http://obmenu.sourceforge.net
+Obmenu-qt is an Openbox menu editor, written in python and using the Qt libraries. It allows to edit menus
+in an intuitive way. It was inspired on another very popular menu editor: http://obmenu.sourceforge.net
 
 
 Requirements:
@@ -17,17 +16,10 @@ Requirements:
 The best way to install this requirements is through a
 package manager like: apt-get, emerge, rpm, yum, etc.
 
-PyQt4 is not available from pip or easy_install
+On Debian systems all dependencies can be installed through apt-get:
 
-Argparse can be installed from easy_install or pip:
-
-<code>sudo easy_install argparse</code>
-<code>sudo pip install argparse</code>
-
-- python >= 2.3
 - python-setuptools
-- argparse
-- python-qt >= 4
+- python-qt4
 - python-lxml
 
 
@@ -64,6 +56,8 @@ The development still active there are a few features not yet implemented:
 - [X] Open menu file via menu
 - [X] Save as.. a menu file via menu
 - [X] New menu file via menu
+- [ ] Pipe-menus
+- [ ] Links on menu
 - [ ] Locale / Internationalization
 - [ ] Debian package
 
