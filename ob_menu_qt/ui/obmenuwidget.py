@@ -3,7 +3,7 @@
 from PyQt4 import QtGui, QtCore
 from ob_menu_qt.ui.obmenu import Ui_frmObmenu
 from ob_menu_qt.lib.obmenuxml import ObMenuXml
-import os
+import os, shutil
 
 class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     """
@@ -11,6 +11,7 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     the obmenuxml module, QtCreator generated
     file overload
     """
+    # Label indexes
     COL_LABEL = 0
     COL_TYPE = 1
     COL_ACTION = 2
@@ -18,6 +19,9 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
     COL_ID = 4
     COL_ICON = 5
     COL_PROMPT = 6
+
+    # Openbox distribution menu config file
+    OB_ORIGINAL_FILE = "/etc/xdg/openbox/menu.xml"
 
     def __init__(self, icon_path, file_path=None):
         """
@@ -269,10 +273,14 @@ class ObMenuWidget(Ui_frmObmenu, QtGui.QWidget):
         menu_path = os.getenv("HOME") + "/.config/openbox/menu.xml"
 
         if not os.path.isfile(menu_path):
-            QtGui.QMessageBox.warning(self, 
-                "Missing menu file", 
-                "You dont seems to have a openbox menu file in the default location: %s" % (menu_path))
-            return None
+
+            if os.path.isfile(self.OB_ORIGINAL_FILE):
+                shutil.copy2(self.OB_ORIGINAL_FILE, menu_path)
+            else:
+                QtGui.QMessageBox.warning(self,
+                                        "Missing menu file",
+                                        "You don't have a menu configuration file in your home directory. Is openbox installed?")
+                return None
 
         return menu_path
 
