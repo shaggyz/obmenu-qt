@@ -56,6 +56,7 @@ The development still active there are a few features not yet implemented:
 - [X] Open menu file via menu
 - [X] Save as.. a menu file via menu
 - [X] New menu file via menu
+- [ ] Port to python3 and Qt5
 - [ ] Pipe-menus
 - [ ] Links on menu
 - [ ] Locale / Internationalization
