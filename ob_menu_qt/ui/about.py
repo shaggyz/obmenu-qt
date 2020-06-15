@@ -7,7 +7,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -15,25 +15,27 @@ except AttributeError:
     def _fromUtf8(s):
         return s
 
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+        return QtWidgets.QApplication.translate(context, text, disambig)
 
 class Ui_frmAbout(object):
     def setupUi(self, frmAbout):
         frmAbout.setObjectName(_fromUtf8("frmAbout"))
         frmAbout.resize(608, 325)
-        self.verticalLayout = QtGui.QVBoxLayout(frmAbout)
+        self.verticalLayout = QtWidgets.QVBoxLayout(frmAbout)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.verticalLayout_2 = QtGui.QVBoxLayout()
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
-        self.horizontalLayout = QtGui.QHBoxLayout()
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.label = QtGui.QLabel(frmAbout)
+        self.label = QtWidgets.QLabel(frmAbout)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(12)
@@ -44,13 +46,13 @@ class Ui_frmAbout(object):
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label.setObjectName(_fromUtf8("label"))
         self.horizontalLayout.addWidget(self.label)
-        self.label_10 = QtGui.QLabel(frmAbout)
+        self.label_10 = QtWidgets.QLabel(frmAbout)
         self.label_10.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_10.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_10.setObjectName(_fromUtf8("label_10"))
         self.horizontalLayout.addWidget(self.label_10)
-        self.lblVersion = QtGui.QLabel(frmAbout)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
+        self.lblVersion = QtWidgets.QLabel(frmAbout)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lblVersion.sizePolicy().hasHeightForWidth())
@@ -58,22 +60,22 @@ class Ui_frmAbout(object):
         self.lblVersion.setObjectName(_fromUtf8("lblVersion"))
         self.horizontalLayout.addWidget(self.lblVersion)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
-        self.line = QtGui.QFrame(frmAbout)
-        self.line.setFrameShape(QtGui.QFrame.HLine)
-        self.line.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line = QtWidgets.QFrame(frmAbout)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName(_fromUtf8("line"))
         self.verticalLayout_2.addWidget(self.line)
-        self.label_2 = QtGui.QLabel(frmAbout)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        self.label_2 = QtWidgets.QLabel(frmAbout)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
         self.label_2.setSizePolicy(sizePolicy)
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.verticalLayout_2.addWidget(self.label_2)
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
-        self.label_7 = QtGui.QLabel(frmAbout)
+        self.label_7 = QtWidgets.QLabel(frmAbout)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(12)
@@ -83,13 +85,13 @@ class Ui_frmAbout(object):
         self.label_7.setFont(font)
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.verticalLayout_2.addWidget(self.label_7)
-        self.label_8 = QtGui.QLabel(frmAbout)
+        self.label_8 = QtWidgets.QLabel(frmAbout)
         self.label_8.setOpenExternalLinks(True)
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.verticalLayout_2.addWidget(self.label_8)
-        spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
-        self.label_3 = QtGui.QLabel(frmAbout)
+        self.label_3 = QtWidgets.QLabel(frmAbout)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(12)
@@ -98,13 +100,13 @@ class Ui_frmAbout(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.verticalLayout_2.addWidget(self.label_3)
-        self.label_4 = QtGui.QLabel(frmAbout)
+        self.label_4 = QtWidgets.QLabel(frmAbout)
         self.label_4.setOpenExternalLinks(True)
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.verticalLayout_2.addWidget(self.label_4)
-        spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem2)
-        self.label_5 = QtGui.QLabel(frmAbout)
+        self.label_5 = QtWidgets.QLabel(frmAbout)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(12)
@@ -113,7 +115,7 @@ class Ui_frmAbout(object):
         self.label_5.setFont(font)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.verticalLayout_2.addWidget(self.label_5)
-        self.label_6 = QtGui.QLabel(frmAbout)
+        self.label_6 = QtWidgets.QLabel(frmAbout)
         self.label_6.setOpenExternalLinks(True)
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.verticalLayout_2.addWidget(self.label_6)

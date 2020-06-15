@@ -18,9 +18,9 @@ package manager like: apt-get, emerge, rpm, yum, etc.
 
 On Debian systems all dependencies can be installed through apt-get:
 
-- python-setuptools
-- python-qt4
-- python-lxml
+- python3-setuptools
+- python3-pyqt5
+- python3-lxml
 
 
 Installation:
@@ -56,14 +56,13 @@ The development still active there are a few features not yet implemented:
 - [X] Open menu file via menu
 - [X] Save as.. a menu file via menu
 - [X] New menu file via menu
-- [ ] Port to python3 and Qt5
-- [ ] Pipe-menus
-- [ ] Links on menu
-- [ ] Locale / Internationalization
+- [X] Port to python3 and Qt5
+- [ ] Refactor the whole thing.
+- [ ] Pipe-menus?
+- [ ] Links on menu?
 - [ ] Debian package
 
-If you find an error/bug (for sure) on this program please report it on github project site:
-https://github.com/shaggyz/obmenu-qt (in the issue tracker)
+> 7 years later note: I just ported this to python3 and Qt5, and... OMG this needs a major refactor :poop:
 
 
 

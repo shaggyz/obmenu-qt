@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lxml import etree
 import copy
 
@@ -31,8 +30,8 @@ class ObMenuXml(object):
             self.menu = root[0]
             return True
 
-        except (IOError, Exception), e:
-            print e
+        except (IOError, Exception) as e:
+            print(e)
             return False
 
     def new_file(self):
@@ -59,13 +58,13 @@ class ObMenuXml(object):
 
     def get_root(self):
         """
-        Return the root xml element: <openbox_menu> 
+        Return the root xml element: <openbox_menu>
         """
         root = self.tree.getroot()
 
         if len(root) < 1:
             raise Exception("Invalid menu")
-        
+
         return root
 
     def get_menu(self):
@@ -97,7 +96,7 @@ class ObMenuXml(object):
         Edit a menu item
         """
         if "separator" == type_:
-            return 
+            return
 
         item = self._get_item(type_, index, parent_id)
 
@@ -165,7 +164,7 @@ class ObMenuXml(object):
 
     def save_menu(self, file_path=None):
         """
-        Saves the current xml loaded on memory to a file 
+        Saves the current xml loaded on memory to a file
         If file file path is none the current file will be overwritten
         """
         try:
@@ -174,8 +173,8 @@ class ObMenuXml(object):
 
             self.tree.write(file_path, pretty_print=True, xml_declaration=True, encoding="utf-8")
             return True
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             return False
 
     def add_item(self, label, execute_, action="Execute", parent_id="root-menu", index=0):

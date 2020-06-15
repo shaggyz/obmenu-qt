@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 from ob_menu_qt.ob_menu_qt import ObMenuQt
 app = ObMenuQt()
