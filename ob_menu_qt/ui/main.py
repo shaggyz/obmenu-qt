@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 from ob_menu_qt.ui.obmenuwidget import ObMenuWidget
 from ob_menu_qt.ui.aboutwidget import ObAboutWidget
 
-class UiMainWindow(QtGui.QMainWindow):
-    
+class UiMainWindow(QtWidgets.QMainWindow):
+
     def __init__(self, version, auto_configure=True, icon_path=None, file_path=None):
         """
         Constructs the main window
         """
-        super(QtGui.QMainWindow, self).__init__()
+        super(QtWidgets.QMainWindow, self).__init__()
 
         self.version = version
 
         # openbox menu widget
-        self.frmMenu = ObMenuWidget(icon_path=icon_path)
+        self.frmMenu = ObMenuWidget(icon_path, file_path)
         self.frmMenu.show()
         self.setCentralWidget(self.frmMenu)
 
@@ -36,12 +34,12 @@ class UiMainWindow(QtGui.QMainWindow):
         self.statusBar().showMessage("Ready")
 
         self.setMinimumSize(740, 580)
-        
+
 
     def initMenu(self):
         """
         Configures menu
-        """	
+        """
         menu = self.menuBar()
 
         # --- File Menu ---
@@ -53,7 +51,7 @@ class UiMainWindow(QtGui.QMainWindow):
         menuFile.addAction(self.menuActionSaveAs)
         menuFile.addSeparator()
         menuFile.addAction(self.menuActionQuit)
-        
+
         # --- Edit Menu ---
 
         menuEdit = menu.addMenu("&Edit")
@@ -82,74 +80,74 @@ class UiMainWindow(QtGui.QMainWindow):
         Configures main actions
         """
         # New
-        self.menuActionNew = QtGui.QAction(QtGui.QIcon(self.icon_path + "document-new.png"), "New", self)
+        self.menuActionNew = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "document-new.png"), "New", self)
         self.menuActionNew.setShortcut("Ctrl+N")
         self.menuActionNew.setStatusTip("New menu file")
         self.menuActionNew.triggered.connect(self.frmMenu.new_menu_file)
 
         # Open
-        self.menuActionOpen = QtGui.QAction(QtGui.QIcon(self.icon_path + "document-open.png"), "Open...", self)
+        self.menuActionOpen = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "document-open.png"), "Open...", self)
         self.menuActionOpen.setShortcut("Ctrl+O")
         self.menuActionOpen.setStatusTip("Open menu file...")
         self.menuActionOpen.triggered.connect(self.frmMenu.open_menu_file)
-        
+
         # Save
-        self.menuActionSave = QtGui.QAction(QtGui.QIcon(self.icon_path + "document-save.png"), "Save", self)
+        self.menuActionSave = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "document-save.png"), "Save", self)
         self.menuActionSave.setShortcut("Ctrl+S")
         self.menuActionSave.setDisabled(True)
         self.menuActionSave.setStatusTip("Save current menu")
         self.menuActionSave.triggered.connect(self.frmMenu.save_changes)
 
         # Save As
-        self.menuActionSaveAs = QtGui.QAction(QtGui.QIcon(self.icon_path + "document-save-as.png"), "Save As...", self)
+        self.menuActionSaveAs = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "document-save-as.png"), "Save As...", self)
         self.menuActionSaveAs.setShortcut("Ctrl+Shift+S")
         self.menuActionSaveAs.setStatusTip("Save menu as...")
         self.menuActionSaveAs.triggered.connect(self.frmMenu.save_menu_as)
 
         # Exit
-        self.menuActionQuit = QtGui.QAction(QtGui.QIcon(self.icon_path + "system-shutdown.png"), "Quit", self)
+        self.menuActionQuit = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "system-shutdown.png"), "Quit", self)
         self.menuActionQuit.setShortcut("Ctrl+Q")
         self.menuActionQuit.setStatusTip("Exits menu editor")
         self.menuActionQuit.triggered.connect(self.close)
 
         # Move up
-        self.menuActionMoveUp = QtGui.QAction(QtGui.QIcon(self.icon_path + "go-up.png"), "Move up", self)
+        self.menuActionMoveUp = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "go-up.png"), "Move up", self)
         self.menuActionMoveUp.setDisabled(True)
         self.menuActionMoveUp.setShortcut("Ctrl+Up")
         self.menuActionMoveUp.setStatusTip("Move item up")
         self.menuActionMoveUp.triggered.connect(self.frmMenu.move_item_up)
 
         # Move down
-        self.menuActionMoveDown = QtGui.QAction(QtGui.QIcon(self.icon_path + "go-down.png"), "Move down", self)
+        self.menuActionMoveDown = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "go-down.png"), "Move down", self)
         self.menuActionMoveDown.setDisabled(True)
         self.menuActionMoveDown.setShortcut("Ctrl+Down")
         self.menuActionMoveDown.setStatusTip("Move item down")
         self.menuActionMoveDown.triggered.connect(self.frmMenu.move_item_down)
 
         # Delete
-        self.menuActionDelete = QtGui.QAction(QtGui.QIcon(self.icon_path + "edit-delete.png"), "Delete", self)
+        self.menuActionDelete = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "edit-delete.png"), "Delete", self)
         self.menuActionDelete.setDisabled(True)
-        self.menuActionDelete.setStatusTip("Delete selected item")    
+        self.menuActionDelete.setStatusTip("Delete selected item")
         self.menuActionDelete.triggered.connect(self.frmMenu.remove_item)
 
         # New Menu
-        self.menuActionMenu = QtGui.QAction(QtGui.QIcon(self.icon_path + "archive-insert-directory.png"), "Menu", self)
+        self.menuActionMenu = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "archive-insert-directory.png"), "Menu", self)
         self.menuActionMenu.setIconText("New menu")
         self.menuActionMenu.setIconVisibleInMenu(False)
         self.menuActionMenu.setDisabled(True)
         self.menuActionMenu.setStatusTip("Add menu")
         self.menuActionMenu.triggered.connect(self.frmMenu.new_submenu)
-        
+
         # New Item
-        self.menuActionItem = QtGui.QAction(QtGui.QIcon(self.icon_path + "document-new.png"), "Item", self)
+        self.menuActionItem = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "document-new.png"), "Item", self)
         self.menuActionItem.setIconText("New item")
         self.menuActionItem.setIconVisibleInMenu(False)
         self.menuActionItem.setDisabled(True)
         self.menuActionItem.setStatusTip("Add item")
         self.menuActionItem.triggered.connect(self.frmMenu.new_item)
-        
+
         # New Separator
-        self.menuActionSeparator = QtGui.QAction(QtGui.QIcon(self.icon_path + "zoom-fit-width.png"), "Separator", self)
+        self.menuActionSeparator = QtWidgets.QAction(QtGui.QIcon(self.icon_path + "zoom-fit-width.png"), "Separator", self)
         self.menuActionSeparator.setIconText("New separator")
         self.menuActionSeparator.setIconVisibleInMenu(False)
         self.menuActionSeparator.setDisabled(True)
@@ -157,17 +155,17 @@ class UiMainWindow(QtGui.QMainWindow):
         self.menuActionSeparator.triggered.connect(self.frmMenu.new_separator)
 
         # New Link
-        self.menuActionLink = QtGui.QAction("Link", self)
+        self.menuActionLink = QtWidgets.QAction("Link", self)
         self.menuActionLink.setDisabled(True)
         self.menuActionLink.setStatusTip("Add link")
 
         # New Pipemenu
-        self.menuActionPipe = QtGui.QAction("Pipemenu", self)
+        self.menuActionPipe = QtWidgets.QAction("Pipemenu", self)
         self.menuActionPipe.setDisabled(True)
         self.menuActionPipe.setStatusTip("Add pipemenu")
 
         # About
-        self.menuActionAbout = QtGui.QAction("About", self)
+        self.menuActionAbout = QtWidgets.QAction("About", self)
         self.menuActionAbout.setStatusTip("About")
         self.menuActionAbout.triggered.connect(self.frmAbout.show)
 
@@ -177,7 +175,7 @@ class UiMainWindow(QtGui.QMainWindow):
         """
         self.frmAbout = ObAboutWidget(self.icon_path)
         self.frmAbout.set_version(self.version)
-        self.frmAbout.setupUi(QtGui.QWidget())
+        self.frmAbout.setupUi(QtWidgets.QWidget())
 
     def closeEvent(self, event):
         """
@@ -204,4 +202,4 @@ class UiMainWindow(QtGui.QMainWindow):
         toolbar.addSeparator()
         toolbar.addAction(self.menuActionDelete)
 
-        
+

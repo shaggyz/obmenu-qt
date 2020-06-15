@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 import os
 
 from ob_menu_qt.ui.about import Ui_frmAbout
 
 
-class ObAboutWidget(Ui_frmAbout, QtGui.QDialog):
+class ObAboutWidget(Ui_frmAbout, QtWidgets.QDialog):
     """
     About widget container
     """
@@ -14,7 +12,7 @@ class ObAboutWidget(Ui_frmAbout, QtGui.QDialog):
         """
         Constructs the about window
         """
-        super(QtGui.QDialog, self).__init__()
+        super(QtWidgets.QDialog, self).__init__()
 
         self.setupUi(self)
         self.icon_path = icon_path
