@@ -17,3 +17,4 @@ build
 # Debian package folder
 deb_dist
 tags
+old
