@@ -4,6 +4,8 @@ from lxml import etree
 import os
 import shutil
 
+# Openbox distribution menu config file
+OB_ORIGINAL_FILE = "/etc/xdg/openbox/menu.xml"
 
 class OpenBoxMenu:
     """ Representation of the openbox menu file """
@@ -17,16 +19,8 @@ class OpenBoxMenu:
         """ Parse a menu file """
         contents = self._read_config_file()
         parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
-        self.menu_data = objectify.fromstring(contents.encode('ascii'), parser=parser)
-
-        # openbox_menu
-        print(self.menu_data)
-        for menu in self.menu_data:
-            # menu
-            print(menu)
-            for item in menu:
-                # items
-                print(item)
+        menu_data = objectify.fromstring(contents.encode('ascii'), parser=parser)
+        return menu_data
 
     def dump(self):
         """ Converts the current menu to XML """
@@ -40,3 +34,9 @@ class OpenBoxMenu:
     def _backup(self):
         """ Creates a configuration backup """
         shutil.copyfile(self.file_path, self.file_path + ".bkp")
+
+    @staticmethod
+    def is_comment(node):
+        """ returns true if the given node is an XML comment """
+        return node.tag is etree.Comment
+
