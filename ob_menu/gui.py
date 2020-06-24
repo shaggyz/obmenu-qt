@@ -1,6 +1,7 @@
 
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 from ob_menu.menu import OpenBoxMenu
 
 
@@ -25,16 +26,38 @@ class TreeView(QTreeWidget):
 
         for entry in root:
             if OpenBoxMenu.is_comment(entry):
-                continue
-            if entry.tag == '{http://openbox.org/}item':
+                item = QTreeWidgetItem(main)
+                item.setText(0, str(entry))
+            elif entry.tag == '{http://openbox.org/}item':
                 item = QTreeWidgetItem(main)
                 item.setText(0, entry.get("label"))
+            elif entry.tag == '{http://openbox.org/}separator':
+                item = QTreeWidgetItem(main)
+                item.setText(0, '------------')
+            elif entry.tag == '{http://openbox.org/}menu':
+                item = QTreeWidgetItem(main)
+                item.setText(0, entry.get("label") or entry.get('id'))
+            else:
+                print("Unknown tag: %s" % entry.tag)
+                print(entry)
+
+        main.setExpanded(True)
+
+
+class ItemEditor(QWidget):
+    """ The item editor widget """
+    def __init__(self):
+        super().__init__()
+        layout = QHBoxLayout(self)
+        layout.addWidget(QLabel("test"))
+
 
 
 class MainWindow(QMainWindow):
 
     def _configure_window(self):
         self._configure_menu()
+        self.tree_view = TreeView()
         self._load_items()
         self.statusBar().showMessage('Ready')
 
@@ -42,14 +65,20 @@ class MainWindow(QMainWindow):
         menu = OpenBoxMenu()
         items = menu.parse()
 
-        tree_view = TreeView()
-        tree_view.load_tems(items)
+        self.tree_view.load_tems(items)
+        container = QWidget()
+        editor = ItemEditor()
 
-        self.setCentralWidget(tree_view)
+        layout = QVBoxLayout()
+        layout.addWidget(self.tree_view)
+        layout.addWidget(editor)
+
+        container.setLayout(layout)
+
+        self.setCentralWidget(container)
 
     def _configure_menu(self):
         menu_bar = self.menuBar()
-        print("config menu")
 
     def show(self):
         self._configure_window()
