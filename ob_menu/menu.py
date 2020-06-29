@@ -10,7 +10,7 @@ OB_ORIGINAL_FILE = "/etc/xdg/openbox/menu.xml"
 class OpenBoxMenu:
     """ Representation of the openbox menu file """
 
-    def __init__(self):
+    def __init__(self, file_path):
         """ Sets the file name """
         self.file_path = "/home/shaggyz/.config/openbox/menu.xml"
         self.menu_data = None
